@@ -1,4 +1,4 @@
-/* Get data from "lat_sociales_cine" between 01/9/2020 - 01/02/2021 */
+/* Get data from "-FACULTAD-LATINOAMERICANA-DE-CIENCIAS-SOCIALES" between 01/9/2020 - 01/02/2021 */
 /* https://alkemy-labs.atlassian.net/browse/PT173-18 */
 
 SELECT 	universities AS university,
@@ -11,8 +11,8 @@ SELECT 	universities AS university,
 		locations AS "location",
 		emails AS email
         
-	FROM lat_sociales_cine AS cine
+	FROM lat_sociales_cine
 
 WHERE 
-	universities = "UNIVERSIDAD-DEL-CINE"
+	universities = "-FACULTAD-LATINOAMERICANA-DE-CIENCIAS-SOCIALES"
 	AND TO_DATE(inscription_dates, 'DD-MM-YYYY') BETWEEN '01-09-2020' AND '01-02-2021'

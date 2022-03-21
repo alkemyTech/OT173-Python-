@@ -1,4 +1,5 @@
 /* Get data from "lat_sociales_cine" between 01/9/2020 - 01/02/2021 */
+/* https://alkemy-labs.atlassian.net/browse/PT173-18 */
 
 SELECT 	universities AS university,
 		careers AS career,

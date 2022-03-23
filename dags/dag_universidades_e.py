@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+
 # from airflow.operators.python import PythonOperator
 
 with DAG(
@@ -23,4 +24,5 @@ with DAG(
     # Load .txt to S3 server
     upload_data = DummyOperator(task_id='upload_data')
 
-    execute_query_inter >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data, execute_query_pampa >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data
+    execute_query_inter >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data,
+    execute_query_pampa >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data

@@ -5,7 +5,7 @@ from airflow.operators.dummy import DummyOperator
 
 with DAG(
     'dag_universities_f',
-    description='DAG',
+    description='DAG for universities group F',
     schedule_interval=timedelta(hours=1),
     start_date=datetime.today()
 ) as dag:

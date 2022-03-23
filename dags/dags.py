@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 
 from airflow import DAG
+
 from airflow.operators.dummy import DummyOperator
-# from airflow.operators.python import PythonOperator
-# from airflow.utils.dates import days_ago
 
 import logging
 
@@ -11,7 +10,7 @@ default_args = {
     'owner': 'airflow', 
     'depends_on_past': False,
     'start_date': datetime(2022, 3, 23),
-    #'email': ['airflowexample.com'],
+    # 'email': ['airflowexample.com'],
     # 'email_on_failure': False,
     # 'email_on_retry': False,
     # 'retries': 1,

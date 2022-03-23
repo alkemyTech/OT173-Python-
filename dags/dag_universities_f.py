@@ -29,4 +29,3 @@ with DAG(
     load_task = DummyOperator(task_id='load_data')
 
     [extract_univ_moron_task,extract_univ_rio_cuarto_task] >> transform_task >> load_task
-

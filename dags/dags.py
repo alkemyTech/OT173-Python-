@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 
 from airflow import DAG
-
 from airflow.operators.dummy import DummyOperator
-#from airflow.operators.python import PythonOperator
-#from airflow.utils.dates import days_ago
+# from airflow.operators.python import PythonOperator
+# from airflow.utils.dates import days_ago
 
 import logging
 
@@ -13,22 +12,22 @@ default_args = {
     'depends_on_past': False,
     'start_date': datetime(2022, 3, 23),
     #'email': ['airflowexample.com'],
-    #'email_on_failure': False,
-    #'email_on_retry': False,
-    #'retries': 1,
+    # 'email_on_failure': False,
+    # 'email_on_retry': False,
+    # 'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
 
 # Get data from SQL
-def getData():
+def get_data():
     logging.info('Getting data')
 
 # Process data in a DataFrame
-def dataProcess():
+def data_process():
     logging.info('Processing data')
 
 # Save date in S3
-def saveData():
+def save_data():
     logging.info('Saving data in S3')
 
 with DAG(
@@ -36,7 +35,7 @@ with DAG(
     default_args = default_args,
     description = 'Dags Universities',
     schedule_interval = '@hourly',
-    #start_date = datetime(2022, 1, 19),
+    # start_date = datetime(2022, 1, 19),
     tags = ['dags'],
 
 ) as dag:

@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
+import logging
 
 from airflow import DAG
 
-from airflow.operators.dummy import DummyOperator
-
-import logging
+from airflow.operators.python import PythonOperator
 
 default_args = {
     'owner': 'airflow', 
@@ -38,8 +37,10 @@ with DAG(
     tags = ['dags'],
 
 ) as dag:
-    getData_task = DummyOperator(task_id='getData', python_callable=getData)
-    dataProcess_task = DummyOperator(task_id='dataProcess', python_callable=dataProcess)
-    saveData_task = DummyOperator(task_id='saveData', python_callable=saveData)
+    getData_task = PythonOperator(task_id='get_data', python_callable=get_data)
+    dataProcess_task = PythonOperator(task_id='data_process', python_callable=data_process)
+    saveData_task = PythonOperator(task_id='save_data', python_callable=save_data)
     
     getData_task >> dataProcess_task >> saveData_task
+
+# HASTA ACA

@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
 
 from airflow import DAG
-
 from airflow.operators.python import PythonOperator
 
 default_args = {
@@ -16,17 +15,21 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
+
 # Get data from SQL
 def get_data():
     logging.info('Getting data')
+
 
 # Process data in a DataFrame
 def data_process():
     logging.info('Processing data')
 
+
 # Save date in S3
 def save_data():
     logging.info('Saving data in S3')
+
 
 with DAG(
     'dag-g-PT173-34',
@@ -35,12 +38,9 @@ with DAG(
     schedule_interval = '@hourly',
     # start_date = datetime(2022, 1, 19),
     tags = ['dags'],
-
 ) as dag:
-    getData_task = PythonOperator(task_id='get_data', python_callable=get_data)
-    dataProcess_task = PythonOperator(task_id='data_process', python_callable=data_process)
-    saveData_task = PythonOperator(task_id='save_data', python_callable=save_data)
+    getdata_task = PythonOperator(task_id='get_data', python_callable=get_data)
+    dataprocess_task = PythonOperator(task_id='data_process', python_callable=data_process)
+    savedata_task = PythonOperator(task_id='save_data', python_callable=save_data)
     
-    getData_task >> dataProcess_task >> saveData_task
-
-# HASTA ACA
+    getdata_task >> dataprocess_task >> savedata_task

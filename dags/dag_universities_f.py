@@ -15,7 +15,7 @@ with DAG(
 
     # Transform data
     transform_task = DummyOperator(task_id='transform_data')
-    
+
     # Load data
     load_task = DummyOperator(task_id='load_data')
 

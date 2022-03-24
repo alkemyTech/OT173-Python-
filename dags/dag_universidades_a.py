@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 default_args = {
     'retries': 5,  # Try in 5 opportunities to run the script

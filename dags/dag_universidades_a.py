@@ -1,5 +1,4 @@
 import logging
-
 from time import strftime
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),

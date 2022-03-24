@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 
-
 default_args = {
     'owner': 'alkemy',
     'depends_on_past': False,

@@ -5,7 +5,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 default_args = {
-    'owner': 'airflow', 
+    'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2022, 3, 23),
     # 'email': ['airflowexample.com'],

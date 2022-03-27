@@ -1,7 +1,13 @@
+import logging
 from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+
+logging.basicConfig(level=logging.INFO, datefmt=("%Y-%m-%d"),
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+log = logging.getLogger("dag_universidades_e")
 
 # added attribute default_args into DAG: default_args = default_args.
 default_args = {

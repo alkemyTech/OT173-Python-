@@ -7,7 +7,7 @@ from airflow.operators.python import PythonOperator
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2022, 3, 23),
+    # 'start_date': datetime(2022, 3, 23),
     # 'email': ['airflowexample.com'],
     # 'email_on_failure': False,
     # 'email_on_retry': False,
@@ -36,7 +36,7 @@ with DAG(
     default_args=default_args,
     description='Dags Universities',
     schedule_interval='@hourly',
-    # start_date = datetime(2022, 1, 19),
+    start_date = datetime(2022, 3, 23),
     tags=['universities'],
 ) as dag:
     getdata_task = PythonOperator(task_id='get_data', python_callable=get_data)

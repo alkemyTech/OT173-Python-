@@ -14,7 +14,7 @@ default_args = {
 with DAG(
         dag_id='dag_universidades_c',
         schedule_interval='@hourly',
-        start_date=datetime.now() - timedelta(days=1),
+        start_date=datetime(2022, 3, 27),
         catchup=False,
         default_args=default_args
         ) as dag:

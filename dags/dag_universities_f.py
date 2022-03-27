@@ -7,7 +7,7 @@ with DAG(
     'dag_universities_f',
     description='DAG for universities group F',
     schedule_interval=timedelta(hours=1),
-    start_date=datetime.today()
+    start_date=datetime(2022, 3, 19)
 ) as dag:
     # Extract data
     extract_univ_moron_task = DummyOperator(task_id='extract_univ_moron')

@@ -9,6 +9,8 @@ default_args = {
     'email': ['alkemy@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
+    'retries': 5,
+    'retry_delay': timedelta(minutes=5),
 }
 
 with DAG(

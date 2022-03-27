@@ -3,8 +3,14 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 
+default_args = {
+    'retries': 5,
+    'retry_delay': timedelta(minutes=5)
+}
+
 with DAG(
     'dag_universidades_h',
+    default_args=default_args,
     description='DAG for processing data from Universidad Del Cine and Universidad De Buenos Aires',
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2022, 3, 20)

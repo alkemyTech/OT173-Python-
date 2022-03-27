@@ -3,10 +3,15 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 
-# from airflow.operators.python import PythonOperator
+# added attribute default_args into DAG: default_args = default_args.
+default_args = {
+    'retries': 5,
+    'retry_delay': timedelta(minutes=5)
+}
 
 with DAG(
     'dag_universidades_e',
+    default_args=default_args,
     description='Tasks universities group e',
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2022, 4, 15)

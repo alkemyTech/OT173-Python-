@@ -1,7 +1,14 @@
+import logging
+from time import strftime
 from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+
+logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
+                    format='%(asctime)s - %(name)s - %(message)s')
+
+logger = logging.getLogger("Universidades_A")
 
 default_args = {
     'retries': 5,  # Try in 5 opportunities to run the script

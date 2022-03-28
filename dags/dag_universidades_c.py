@@ -1,12 +1,12 @@
+import os
 import logging
 from datetime import datetime, timedelta
-from os import path, makedirs
 
 import pandas as pd
 from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.dummy import DummyOperator
 from airflow.hooks.postgres_hook import PostgresHook
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import PythonOperator
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
@@ -44,12 +44,14 @@ with DAG(
             university (str): The name of the university to be extracted.
             example: 'universidad_de_los_andes'
         """
-        base_path = path.abspath(path.join(path.dirname(__file__), ".."))
-        path_tmp = path.abspath(path.join(base_path, 'include', 'tmp'))
-        if not path.isdir(path_tmp):
-            makedirs(path_tmp)
-        path_csv = path.join(path_tmp, university)
-        path_query = path.join(base_path, 'sql', query)
+        base_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+            ".."))
+        path_tmp = os.path.abspath(os.path.join(base_path, 'include', 'tmp'))
+        if not os.path.isdir(path_tmp):
+            os.makedirs(path_tmp)
+        path_csv = os.path.join(path_tmp, university)
+        path_query = os.path.join(base_path, 'sql', query)
         pg_hook = PostgresHook(
             postgres_conn_id='alkemy_db',
             schema='training'

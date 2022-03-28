@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -45,8 +45,9 @@ with DAG(
             example: 'universidad_de_los_andes'
         """
         base_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__),
-            ".."))
+            os.path.join(
+                os.path.dirname(__file__),
+                ".."))
         path_tmp = os.path.abspath(os.path.join(base_path, 'include', 'tmp'))
         if not os.path.isdir(path_tmp):
             os.makedirs(path_tmp)

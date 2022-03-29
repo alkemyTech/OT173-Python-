@@ -21,7 +21,7 @@ def connect_function():  # With this function I will create de engine to conect 
     DB_USER = config('DB_USER')
 
     # Return de engine
-    engine = create_engine(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
+    engine = create_engine(f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
 
     return(engine.connect())
 

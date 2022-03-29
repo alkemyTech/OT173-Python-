@@ -1,9 +1,47 @@
 import logging
 from datetime import datetime, timedelta
 from time import strftime
+import os
+import pandas as pd
+from decouple import config
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import PythonOperator 
+
+def connect_function():  # With this function I will create de engine to conect to the Database
+
+    # I take the credentials from .env:
+    DB_DATABASE = config('DB_DATABASE')
+    DB_HOST = config('DB_HOST')
+    DB_PASSWORD = config('DB_PASSWORD')
+    DB_PORT = config('DB_PORT')
+    DB_USER = config('DB_USER')
+
+    # Return de engine
+    engine = create_engine(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
+
+    return(engine.connect())
+
+def query_csvfile(**kwargs):
+   
+    conn = connect_function()
+    # root folder
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    ## Create 'csv' folder if not exist
+    new_folder = os.path.join(root_dir, 'csv')
+    os.makedirs(new_folder, exist_ok=True)
+
+    file_path = os.path.join(root_dir,'sql',kwargs['sql_file'])
+    with open(file_path) as file:
+        query = text(file.read())
+        result = conn.execute(query)
+        df = pd.DataFrame(result.fetchall())
+        df.columns = result.keys()
+        csv_path = os.path.join(root_dir, 'csv', kwargs['file_name'])
+        df.to_csv(csv_path, sep = ',', index=False)
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
                     format='%(asctime)s - %(name)s - %(message)s')
@@ -22,8 +60,14 @@ with DAG(
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2022, 3, 19)
 ) as dag:
-    tarea_1 = DummyOperator(task_id="Query_Flores")      # PythonOperator to do the query
-    tarea_2 = DummyOperator(task_id="Query_Villa_Maria")  # PythonOperator to do the query
+    tarea_1 = PythonOperator(task_id='Query_Floress',
+                                python_callable = query_csvfile,
+                                op_kwargs = {'sql_file':'query_flores.sql',
+                                'file_name':'flores.csv'})  # PythonOperator to do the query
+    tarea_2 = PythonOperator(task_id='Query_Villa_Maria',
+                                python_callable = query_csvfile,
+                                op_kwargs = {'sql_file':'query_villa_maria.sql',
+                                'file_name':'villa_maria.csv'})  # PythonOperator to do the query
     tarea_3 = DummyOperator(task_id="Process_Data")      # PythonOperator to process the data with Pandas
     tarea_4 = DummyOperator(task_id="Charge_Data")  # Charge the data with S3Operator
 

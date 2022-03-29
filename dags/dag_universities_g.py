@@ -27,12 +27,10 @@ def get_data():
 
     logger.info('Getting data')
 
-
 def data_process():
     """ Process data in a DataFrame """
 
     logger.info('Processing data')
-
 
 def save_data():
     """ Save data in S3 """

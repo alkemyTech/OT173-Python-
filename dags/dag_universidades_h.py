@@ -1,8 +1,14 @@
 import logging
+import os
 from datetime import datetime, timedelta
 
+import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import PythonOperator
+from decouple import config
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
@@ -17,6 +23,40 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
+
+def extract_data(sql, csv):
+    """Extact data. Connection to DB, execute SQL query and export to CSV.
+
+    Args:
+        sql (str): Name of SQL script to be executed in '../sql/' directory.
+        csv (str): Name of CSV output to be generated in '../files/' directory (creates it automatically if not exists).
+    """
+
+    # Database Connection
+    USER = config('USER')
+    PASSWD = config('PASSWD')
+    HOST = config('HOST')
+    PORT = config('PORT')
+    DB = config('DB')
+    URL = f'postgresql://{USER}:{PASSWD}@{HOST}:{PORT}/{DB}'
+    engine = create_engine(URL, encoding='utf8')
+    con = engine.connect()
+
+    # Instance directories
+    CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
+    PARENT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, os.pardir))
+
+    # Execute SQl query
+    file = open(f'{PARENT_DIR}/sql/{sql}')
+    query = text(file.read())
+    df = pd.read_sql(query, con)
+    logger.info(sql + csv)
+    if not os.path.exists(f'{PARENT_DIR}/files'):
+        os.makedirs(f'{PARENT_DIR}/files')
+    df.to_csv(f'{PARENT_DIR}/files/{csv}', encoding='utf-8')
+    con.close()
+
+
 with DAG(
     'dag_universidades_h',
     default_args=default_args,
@@ -24,15 +64,30 @@ with DAG(
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2022, 3, 20)
 ) as dag:
-    # Extract data with SQL query - Postgres operator
-    extract_uba = DummyOperator(task_id='extract_uba')
-    extract_cine = DummyOperator(task_id='extract_cine')
+
+    # Extract data with SQL query - Python operator
+    extract_uba = PythonOperator(
+                    task_id='extract_uba',
+                    python_callable=extract_data,
+                    op_kwargs={
+                        'sql': 'query_uba.sql',
+                        'csv': 'extract_uba.csv'
+                        }
+                    )
+    extract_cine = PythonOperator(
+                    task_id='extract_cine',
+                    python_callable=extract_data,
+                    op_kwargs={
+                        'sql': 'query_cine.sql',
+                        'csv': 'extract_cine.csv'
+                        }
+                    )
 
     # Transform data with Pandas - Python operator
     transform_uba = DummyOperator(task_id='transform_uba')
     transform_cine = DummyOperator(task_id='transform_cine')
 
-    # Load data to S3 - S3 operator
+    # Load data to S3 - Python operator
     load_uba = DummyOperator(task_id='load_uba')
     load_cine = DummyOperator(task_id='load_cine')
 

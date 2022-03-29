@@ -1,6 +1,6 @@
 import logging
-from time import strftime
 from datetime import datetime, timedelta
+from time import strftime
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator

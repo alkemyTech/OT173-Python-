@@ -17,8 +17,8 @@ default_args = {
     # 'email': ['airflowexample.com'],
     # 'email_on_failure': False,
     # 'email_on_retry': False,
-    'retries': 5, # Try in 5 opportunities to run the script
-    'retry_delay': timedelta(minutes=5), # Wait 5 minutes to try to run the script again
+    'retries': 5,  # Try in 5 opportunities to run the script
+    'retry_delay': timedelta(minutes=5),  # Wait 5 minutes to try to run the script again
 }
 
 

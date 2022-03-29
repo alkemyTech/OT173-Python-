@@ -33,27 +33,27 @@ def extract_data(sql, csv):
     """
 
     # Database Connection
-    USER = config('USER')
-    PASSWD = config('PASSWD')
-    HOST = config('HOST')
-    PORT = config('PORT')
-    DB = config('DB')
-    URL = f'postgresql://{USER}:{PASSWD}@{HOST}:{PORT}/{DB}'
-    engine = create_engine(URL, encoding='utf8')
+    user = config('USER')
+    passwd = config('PASSWD')
+    host = config('HOST')
+    port = config('PORT')
+    db = config('DB')
+    url = f'postgresql://{user}:{passwd}@{host}:{port}/{db}'
+    engine = create_engine(url, encoding='utf8')
     con = engine.connect()
 
     # Instance directories
-    CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
-    PARENT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, os.pardir))
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
     # Execute SQl query
-    file = open(f'{PARENT_DIR}/sql/{sql}')
+    file = open(f'{parent_dir}/sql/{sql}')
     query = text(file.read())
     df = pd.read_sql(query, con)
     logger.info(sql + csv)
-    if not os.path.exists(f'{PARENT_DIR}/files'):
-        os.makedirs(f'{PARENT_DIR}/files')
-    df.to_csv(f'{PARENT_DIR}/files/{csv}', encoding='utf-8')
+    if not os.path.exists(f'{parent_dir}/files'):
+        os.makedirs(f'{parent_dir}/files')
+    df.to_csv(f'{parent_dir}/files/{csv}', encoding='utf-8')
     con.close()
 
 

@@ -33,7 +33,7 @@ def data_process():
 
     logger.info('Processing data')
 
- 
+
 def save_data():
     """ Save data in S3 """
 

@@ -11,9 +11,8 @@ from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 
-
-
-def connect_function():  # With this function I will create de engine to conect to the Database
+# With this function I will create de engine to conect to the Database:
+def connect_function():
 
     # I take the credentials from .env:
     DB_DATABASE = config('DB_DATABASE')
@@ -64,16 +63,22 @@ with DAG(
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2022, 3, 19)
 ) as dag:
-    tarea_1 = PythonOperator(task_id='Query_Flores',
-                            python_callable=query_to_csv,
-                            op_kwargs={
-                                'sql_file':'query_flores.sql',
-                                'file_name':'flores.csv'})  # PythonOperator to do the query
-    tarea_2 = PythonOperator(task_id='Query_Villa_Maria',
-                            python_callable=query_to_csv,
-                            op_kwargs={
-                                'sql_file':'query_villa_maria.sql',
-                                'file_name':'villa_maria.csv'})  # PythonOperator to do the query
+    tarea_1 = PythonOperator(
+        task_id='Query_Flores',
+        python_callable=query_to_csv,
+        op_kwargs={
+            'sql_file': 'query_flores.sql',
+            'file_name': 'flores.csv'
+        }
+    )  # PythonOperator to do the query
+    tarea_2 = PythonOperator(
+        task_id='Query_Villa_Maria',
+        python_callable=query_to_csv,
+        op_kwargs={
+            'sql_file': 'query_villa_maria.sql',
+            'file_name': 'villa_maria.csv'
+        }
+    )  # PythonOperator to do the query
     tarea_3 = DummyOperator(task_id="Process_Data")      # PythonOperator to process the data with Pandas
     tarea_4 = DummyOperator(task_id="Charge_Data")  # Charge the data with S3Operator
 

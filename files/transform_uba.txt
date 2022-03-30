@@ -1,0 +1,145 @@
+university	career	inscription_date	first_name	last_name	gender	age	postal_code	location	email
+universidad de buenos aires	licenciatura en ciencias antropológicas	2020-09-20	david	cooper	male	92	6105	cañada seca	lukegutierrez@yahoo.com
+universidad de buenos aires	licenciatura en kinesiología y fisiatría	2020-12-19	curtis	hoover	male	27	3081	cavour	lindathomas@gmail.com
+universidad de buenos aires	licenciatura en sociología	2021-01-20	leah	smith	female	59	7318	colonia hinojo	grayhailey@gmail.com
+universidad de buenos aires	ciencias veterinarias	2020-10-19	nina	kaufman	female	29	7603	comandante nicanor otamendi	vazquezjessica@hotmail.com
+universidad de buenos aires	licenciatura en producción de bioimagenes	2021-01-20	christy	boyer	female	28	2445	cristolia	chandlerjoshua@yahoo.com
+universidad de buenos aires	agronomía	2020-10-19	theresa	haley	female	42	8174	arroyo aguas blancas	jeffrey25@yahoo.com
+universidad de buenos aires	diseño de imagen y sonido	2020-12-19	johnny	melendez	male	75	2132	aero club rosario	joseph17@hotmail.com
+universidad de buenos aires	licenciatura en administración	2020-10-19	melissa	thompson	female	92	2703	cabo san fermin	ashley47@hotmail.com
+universidad de buenos aires	licenciatura en ciencias ambientales	2021-01-20	shane	clark	male	55	1667	manuel alberti	odonnellangie@hotmail.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-10-20	manuel	brown	male	74	5413	apeadero las chimbas	amy67@yahoo.com
+universidad de buenos aires	licenciatura en musicoterapia	2020-09-20	timothy	carey	male	3	8206	colonia españa	jeremyporter@gmail.com
+universidad de buenos aires	ingeniería en informática	2020-12-19	stephanie	nguyen	female	7	6389	alegria	jeffreymelendez@gmail.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2020-10-20	nina	flores	female	19	3371	cabure	sarahfleming@gmail.com
+universidad de buenos aires	licenciatura en ciencias antropológicas	2020-10-19	heather	davis	female	29	1826	remedios de escalada	earl45@hotmail.com
+universidad de buenos aires	licenciatura en producción de bioimagenes	2020-09-20	elizabeth	miller	female	26	2752	almacen el descanso	mmartin@yahoo.com
+universidad de buenos aires	licenciatura en producción de bioimagenes	2020-10-19	robert	johnson	male	13	3500	colonia florencia	moranalbert@yahoo.com
+universidad de buenos aires	licenciatura en ciencias ambientales	2021-01-20	bobby	mendez	male	48	2761	estancia santa catalina	gordonvelazquez@hotmail.com
+universidad de buenos aires	ciencias veterinarias	2020-11-21	kelly	nguyen	female	40	3580	kilometro 408	troytorres@yahoo.com
+universidad de buenos aires	licenciatura en ciencia política	2020-12-19	justin	cooke	male	16	1672	villa lynch	shawnbonilla@hotmail.com
+universidad de buenos aires	licenciatura en ciencia y tecnología de alimentos	2020-11-20	philip	cain	male	79	1900	la plata	christopherhall@hotmail.com
+universidad de buenos aires	licenciatura en terapia ocupacional	2020-10-20	stephen	jones	male	7	5609	aristides villanueva	luis03@yahoo.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-10-19	gabriel	wallace	male	20	7207	el trigo	fowlerstacy@hotmail.com
+universidad de buenos aires	licenciatura en ciencias ambientales	2020-09-20	patrick	blankenship	male	11	7261	saladillo norte	johnsondevon@yahoo.com
+universidad de buenos aires	licenciatura en gestión de agroalimentos	2020-11-20	edgar	carey	male	9	4750	agua colorada	eruiz@hotmail.com
+universidad de buenos aires	actuario	2020-10-19	henry	carrillo	male	27	6241	el dia	angela91@gmail.com
+universidad de buenos aires	diseño industrial	2020-09-21	dennis	stark	male	11	5731	alfaland	johnavila@gmail.com
+universidad de buenos aires	licenciatura en sociología	2020-11-19	jessica	johnson	female	0	9411	base aerea teniente matienzo	wwalker@yahoo.com
+universidad de buenos aires	ingeniería mecánica	2020-09-20	jill	kemp	female	75	2841	aldea asuncion	thomasthompson@yahoo.com
+universidad de buenos aires	actuario	2020-10-19	david	edwards	male	5	6201	chanilao	miguel45@gmail.com
+universidad de buenos aires	ingeniería en informática	2021-01-20	amanda	blair	female	59	6475	esteban de luca	allenkevin@gmail.com
+universidad de buenos aires	arquitectura	2020-10-20	jeffrey	richardson	male	92	1739	general hornos	carriehicks@hotmail.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-09-21	jason	hale	male	24	2938	alsina	fowlerbeth@yahoo.com
+universidad de buenos aires	ingeniería mecánica	2020-10-20	stephen	nichols	male	75	3052	cañadita	nmay@gmail.com
+universidad de buenos aires	farmacia	2020-09-20	terry	ayers	male	77	5759	calera argentina	sarah64@yahoo.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-09-20	suzanne	bruce	female	0	4122	alizal	karl02@gmail.com
+universidad de buenos aires	ciencias veterinarias	2020-12-21	austin	harris	male	2	7003	aceilan	larsentyler@hotmail.com
+universidad de buenos aires	licenciatura en ciencias geológicas	2020-12-19	robert	marshall	male	17	8363	colonia josefa	manningchristopher@gmail.com
+universidad de buenos aires	técnico para bioterios	2021-01-20	andrew	casey	male	28	1761	20 de junio	antoniorichardson@gmail.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-10-21	dennis	padilla	male	86	3526	gandolfi	brownjasmine@gmail.com
+universidad de buenos aires	licenciatura en gestión de agroalimentos	2021-01-21	haley	smith	female	49	3344	2 de julio	lolson@hotmail.com
+universidad de buenos aires	licenciatura en psicología	2021-01-21	micheal	ruiz	male	4	3304	barrio don santiago	kpalmer@hotmail.com
+universidad de buenos aires	ingeniería electrónica	2020-09-20	marie	french	female	8	7150	ayacucho	across@gmail.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2020-10-19	antonio	nelson	male	73	3200	colonia los sauces	sara42@yahoo.com
+universidad de buenos aires	licenciatura en terapia ocupacional	2020-11-19	jamie	robbins	female	2	1664	trujui	claytonherrera@gmail.com
+universidad de buenos aires	licenciatura en psicología	2021-01-20	christopher	richard	male	9	4144	amberes	nathanmanning@hotmail.com
+universidad de buenos aires	licenciatura en ciencias de la educación	2020-12-20	thomas	holland	male	9	5881	cañada la negra	crystaljohnson@gmail.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-12-20	jill	wong	female	41	9400	an aike	christopherjackson@gmail.com
+universidad de buenos aires	arquitectura	2021-01-21	charles	graham	male	99	7307	crotto	xbaker@yahoo.com
+universidad de buenos aires	licenciatura en ciencia política	2020-12-19	haley	vasquez	female	9	6354	colonia la gaviota	gsharp@yahoo.com
+universidad de buenos aires	licenciatura en terapia ocupacional	2020-12-21	francisco	hancock	male	99	1875	wilde	bryanelizabeth@hotmail.com
+universidad de buenos aires	bioquímica	2020-10-19	courtney	burns	female	19	8417	cañadon chileno	clopez@yahoo.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2020-12-21	john	jenkins	male	3	3246	achiras	alex86@hotmail.com
+universidad de buenos aires	ingeniería mecánica	2020-10-19	brenda	smith	female	1	2344	achaval rodriguez	lijoy@yahoo.com
+universidad de buenos aires	licenciatura en ciencia política	2020-10-19	brooke	guerra	female	92	4132	agua azul	elliottkristopher@yahoo.com
+universidad de buenos aires	licenciatura en ciencias geológicas	2021-01-20	maria	weeks	female	15	5570	alto del salvador	nwright@hotmail.com
+universidad de buenos aires	licenciatura en musicoterapia	2020-10-21	ryan	adams	male	60	5607	colonia bombal y tabanera	adamsanne@hotmail.com
+universidad de buenos aires	licenciatura en kinesiología y fisiatría	2020-10-19	andrew	jenkins	male	99	2144	campo horquesco	debrafuller@yahoo.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-12-21	luis	marshall	male	88	3127	alcete	salazarnicole@gmail.com
+universidad de buenos aires	farmacia	2020-10-19	sandra	sherman	female	16	6244	banderalo	kevin16@hotmail.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-11-21	olivia	gilbert	female	26	8318	challaco	greeneaaron@hotmail.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2020-09-21	sharon	moreno	female	64	6603	ingeniero williams	hernandezchristopher@hotmail.com
+universidad de buenos aires	licenciatura en ciencias ambientales	2021-01-21	jenna	castaneda	female	85	6424	beruti	gonzalezjason@hotmail.com
+universidad de buenos aires	licenciatura en musicoterapia	2020-09-21	phillip	rivera	male	82	7100	dolores	jgraham@gmail.com
+universidad de buenos aires	ingeniería mecánica	2020-12-20	jonathan	gardner	male	69	3421	bajo guazu	qballard@gmail.com
+universidad de buenos aires	técnico para bioterios	2020-10-21	john	jordan	male	70	1921	alvarez jonte	dcastillo@gmail.com
+universidad de buenos aires	actuario	2020-12-21	jonathan	lewis	male	38	3376	gobernador lanusse	leonchristina@yahoo.com
+universidad de buenos aires	licenciatura en ciencias de la educación	2020-12-21	benjamin	brown	male	15	3051	alejandra	debraparker@gmail.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2020-10-21	carl	wise	male	13	4618	abra de pives	nicole12@yahoo.com
+universidad de buenos aires	licenciatura en musicoterapia	2021-01-21	kara	perry	female	61	6017	chancay	seangarrett@hotmail.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-11-21	mary	hunter	female	5	7263	el chumbeau	kcarney@yahoo.com
+universidad de buenos aires	técnico para bioterios	2021-01-21	charles	powers	male	1	5738	avanzada	stephanie76@gmail.com
+universidad de buenos aires	licenciatura en sociología	2020-10-21	elizabeth	carrillo	female	19	5570	alto del salvador	jenna59@gmail.com
+universidad de buenos aires	agronomía	2020-11-21	jessica	arellano	female	47	8534	aguada cecilio	dgalvan@yahoo.com
+universidad de buenos aires	agronomía	2020-12-19	kristin	bell	female	58	7109	barrio pedro rocco	alyssaharris@yahoo.com
+universidad de buenos aires	técnico para bioterios	2020-11-19	ryan	norris	male	22	3061	antonio pini	ryantaylor@hotmail.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2021-01-21	robert	barry	male	6	8534	aguada cecilio	ldickerson@yahoo.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2021-01-20	susan	stevens	female	10	3470	arroyo grande	robinsongregory@hotmail.com
+universidad de buenos aires	ingeniería en informática	2020-12-19	cody	curry	male	47	2930	la buana moza	moralescasey@gmail.com
+universidad de buenos aires	licenciatura en psicología	2020-10-20	eric	white	male	99	3485	carandaiti	kristinagarcia@yahoo.com
+universidad de buenos aires	contador público	2020-12-19	kristopher	moore	male	65	8308	villa manzano	basschristina@hotmail.com
+universidad de buenos aires	agronomía	2020-11-20	jasmine	wright	female	5	3454	bañado san antonio	joseph78@hotmail.com
+universidad de buenos aires	ingeniería electrónica	2021-01-21	johnny	kelly	male	87	5601	capitan montoya	qbarnett@hotmail.com
+universidad de buenos aires	licenciatura en gestión de agroalimentos	2020-11-19	brandon	thompson	male	96	8430	costa del rio azul	zcross@hotmail.com
+universidad de buenos aires	bioquímica	2020-12-19	james	williams	male	92	2405	colonia cello	triciacameron@gmail.com
+universidad de buenos aires	licenciatura en gestión de agroalimentos	2021-01-21	scott	valdez	male	82	5545	agua de diaz	tmayo@yahoo.com
+universidad de buenos aires	técnico para bioterios	2020-11-19	janice	cooper	female	78	6614	franklin	heather02@gmail.com
+universidad de buenos aires	ciencias veterinarias	2020-10-19	tracy	ware	female	0	2535	el trebol	longnancy@hotmail.com
+universidad de buenos aires	licenciatura en psicología	2020-11-20	crystal	lopez	female	11	6203	el olivo	moodycynthia@yahoo.com
+universidad de buenos aires	licenciatura en ciencias antropológicas	2021-01-20	michael	riley	male	79	5551	estacion uspallata	matthewzimmerman@hotmail.com
+universidad de buenos aires	licenciatura en ciencia y tecnología de alimentos	2020-11-19	nathan	chapman	male	0	8402	dina huapi	grahammaria@yahoo.com
+universidad de buenos aires	licenciatura en producción de bioimagenes	2020-11-19	trevor	salinas	male	37	9207	arroyo guilaia	chad70@yahoo.com
+universidad de buenos aires	diseño industrial	2020-10-19	tammy	daniels	female	34	9400	an aike	kyle70@hotmail.com
+universidad de buenos aires	ingeniería electrónica	2020-11-19	fred	carroll	male	71	8319	campamento sol	williamscatherine@yahoo.com
+universidad de buenos aires	licenciatura en kinesiología y fisiatría	2020-12-21	william	martin	male	8	8305	aguada san roque	jordanrobert@yahoo.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-11-20	steve	daniel	male	0	8500	el dique	brittneygibson@hotmail.com
+universidad de buenos aires	licenciatura en ciencia política	2020-12-19	jonathan	fernandez	male	87	3514	cacui	moorematthew@hotmail.com
+universidad de buenos aires	agronomía	2020-10-21	kristin	boyd	female	81	2808	atucha	cherylmcintyre@hotmail.com
+universidad de buenos aires	licenciatura en ciencias geológicas	2020-09-20	sarah	woods	female	45	3432	bella vista	anthony62@hotmail.com
+universidad de buenos aires	licenciatura en ciencias biológicas	2020-11-21	michael	thomas	male	37	2622	maggiolo	lgonzalez@gmail.com
+universidad de buenos aires	diseño industrial	2020-12-20	carrie	collier	female	40	8153	balneario oriente	samuel51@hotmail.com
+universidad de buenos aires	licenciatura en ciencia política	2020-11-21	charlotte	ramirez	female	93	6459	colonia sere	rebecca68@hotmail.com
+universidad de buenos aires	licenciatura en gestión de agroalimentos	2020-09-21	alyssa	hernandez	female	41	3083	grutly	jennifergonzalez@hotmail.com
+universidad de buenos aires	actuario	2020-11-20	jason	nguyen	male	37	8401	cullin manzano	dixonmelissa@gmail.com
+universidad de buenos aires	licenciatura en musicoterapia	2020-11-20	jennifer	li	female	13	2315	estacion saguier	christine45@gmail.com
+universidad de buenos aires	licenciatura en planificación y diseño del paisaje	2020-12-21	ashley	williams	female	98	5367	cachiyuyal	jennifercruz@gmail.com
+universidad de buenos aires	diseño industrial	2021-01-21	jennifer	thomas	female	65	2823	aero club canal	rwoods@hotmail.com
+universidad de buenos aires	licenciatura en artes	2021-01-20	joshua	moore	male	61	5700	alto blanco	polson@hotmail.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2021-01-20	kerry	wright	female	74	3224	la blanqueada	harry39@hotmail.com
+universidad de buenos aires	contador público	2021-01-20	karen	jordan	female	14	4705	aguadita	taylorjoseph@yahoo.com
+universidad de buenos aires	técnico para bioterios	2020-11-21	jeffrey	hall	male	21	2121	perez	tamara50@gmail.com
+universidad de buenos aires	bioquímica	2020-11-21	roberto	garner	male	1	6022	la oriental	jillian82@hotmail.com
+universidad de buenos aires	licenciatura en administración	2020-10-19	cole	gonzalez	male	98	6459	colonia sere	christophersanchez@gmail.com
+universidad de buenos aires	licenciatura en ciencias antropológicas	2020-09-21	brandon	williams	male	94	6330	arturo almaraz	joycegilmore@hotmail.com
+universidad de buenos aires	licenciatura en artes	2020-12-21	thomas	schneider	male	66	3505	arroyo quintana	alijose@yahoo.com
+universidad de buenos aires	licenciatura en sociología	2020-12-19	charles	yates	male	88	3045	campo zavalla	xwagner@gmail.com
+universidad de buenos aires	contador público	2020-12-20	keith	harris	male	64	1905	jose ferrari	whitebrett@hotmail.com
+universidad de buenos aires	licenciatura en psicología	2020-10-20	joshua	edwards	male	40	7150	ayacucho	elizabethcannon@gmail.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2021-01-20	tiffany	fisher	female	83	2601	la chispa	hinesamy@yahoo.com
+universidad de buenos aires	ingeniería mecánica	2020-10-21	donna	wilson	female	69	4624	abra mayo	omcdonald@yahoo.com
+universidad de buenos aires	ciencias veterinarias	2020-12-21	sheila	bradshaw	female	75	3382	colonia cunci	turnersteven@yahoo.com
+universidad de buenos aires	licenciatura en kinesiología y fisiatría	2020-10-21	victoria	kramer	female	11	3180	diego lopez	ryanjasmine@gmail.com
+universidad de buenos aires	ciencias veterinarias	2020-10-21	angela	graham	female	50	5561	ancon	jamie43@yahoo.com
+universidad de buenos aires	arquitectura	2020-12-20	jack	harris	male	55	5383	agua colorada	thomasbrown@yahoo.com
+universidad de buenos aires	agronomía	2020-12-19	derek	walker	male	64	7509	oriente	williamho@yahoo.com
+universidad de buenos aires	diseño de imagen y sonido	2020-09-21	mark	perez	male	92	3351	azara	mariah47@yahoo.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2020-10-20	norman	cooper	male	22	8430	costa del rio azul	thomas86@hotmail.com
+universidad de buenos aires	licenciatura en ciencia y tecnología de alimentos	2020-10-19	deborah	harris	female	9	6474	campo aristimuño	pwilliams@hotmail.com
+universidad de buenos aires	ingeniería mecánica	2020-09-20	james	mccall	male	6	6559	recalde	lauraphelps@yahoo.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2020-09-20	james	moran	male	21	1646	san fernando	brownfelicia@yahoo.com
+universidad de buenos aires	licenciatura en ciencias de la computación	2020-12-19	rebecca	leon	female	10	9217	cholila	victoriadominguez@gmail.com
+universidad de buenos aires	diseño de imagen y sonido	2020-10-21	robert	elliott	male	84	2938	alsina	amychavez@yahoo.com
+universidad de buenos aires	diseño industrial	2020-11-20	michael	beltran	male	59	5443	algarrobo verde	william55@gmail.com
+universidad de buenos aires	licenciatura en sociología	2020-12-21	zachary	sanchez	male	6	2732	4 de febrero	thernandez@gmail.com
+universidad de buenos aires	bioquímica	2020-09-21	phillip	stewart	male	15	5541	algarrobal abajo	clarkjames@gmail.com
+universidad de buenos aires	bioquímica	2020-09-21	craig	thomas	male	17	6319	carro quemado	wadejeremiah@hotmail.com
+universidad de buenos aires	licenciatura en ciencia política	2020-10-19	leslie	thomas	female	75	3401	arroyo pelon	adamthomas@hotmail.com
+universidad de buenos aires	licenciatura en ciencia y tecnología de alimentos	2021-01-21	cassidy	clark	female	8	2854	dos hermanas	tthomas@yahoo.com
+universidad de buenos aires	licenciatura en administración	2021-01-20	aaron	gonzales	male	77	2440	barrio belgrano ortiz	jasonrobinson@yahoo.com
+universidad de buenos aires	licenciatura en ciencias geológicas	2020-11-21	douglas	ward	male	97	2311	adolfo alsina	bryan40@gmail.com
+universidad de buenos aires	licenciatura en kinesiología y fisiatría	2020-11-21	christina	watson	female	65	7165	faro querandi	mharvey@yahoo.com
+universidad de buenos aires	ingeniería mecánica	2020-09-20	jesse	craig	male	49	3125	antonio tomas	uford@hotmail.com
+universidad de buenos aires	actuario	2020-10-20	sharon	young	female	21	6383	campo moises seccion 1a	laura22@yahoo.com
+universidad de buenos aires	licenciatura en sociología	2020-12-21	whitney	larson	female	11	5563	agua amarga	ffoster@gmail.com
+universidad de buenos aires	licenciatura en relaciones del trabajo	2020-09-21	christina	wang	female	29	3214	estacion yerua	mckenziebowman@hotmail.com

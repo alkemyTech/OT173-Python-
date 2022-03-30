@@ -70,16 +70,14 @@ with DAG(
         op_kwargs={
             'sql_file': 'query_flores.sql', 
             'file_name': 'flores.csv'
-        }
-            )  # PythonOperator to do the query
+        })  # PythonOperator to do the query
     tarea_2 = PythonOperator(
         task_id='Query_Villa_Maria', 
         python_callable=query_to_csv, 
         op_kwargs={
             'sql_file': 'query_villa_maria.sql', 
             'file_name': 'villa_maria.csv'
-        }
-             )  # PythonOperator to do the query
+        })  # PythonOperator to do the query
     tarea_3 = DummyOperator(task_id="Process_Data")      # PythonOperator to process the data with Pandas
     tarea_4 = DummyOperator(task_id="Charge_Data")  # Charge the data with S3Operator
 

@@ -17,7 +17,13 @@ log = logging.getLogger("dag_universidades_e")
 
 
 def extract_data(query_name, csv_name):
+    '''
+    Extract data from database in Postgresql using SQLAlchemy and save to csv file.
 
+    Required: 
+        query_name: name of file sql that is inside of the folder sql.
+        csv_name: name of csv file that will store in a folder called csv.
+    '''
     engine = create_engine(config('DIALECT')+"://"+config('POSTGRESQL_USER')+":"+config('POSTGRESQL_PASSWORD')+"@" +
                            config('POSTGRESQL_HOST')+"/"+config('POSTGRESQL_DB'))
 

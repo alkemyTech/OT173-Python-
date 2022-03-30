@@ -59,16 +59,14 @@ def transform_cine_data(csv, txt):
         elif column == 'age':
             df_cine['age'] = df_cine['age'].apply(lambda x: calculate_age(x))
         elif column == 'gender':
-            df_cine['gender'] = df_cine['gender'].apply(lambda x: x.lower() \
-                                                                   .replace('m', 'male') \
-                                                                   .replace('f', 'female') \
+            df_cine['gender'] = df_cine['gender'].apply(lambda x: x.lower()
+                                                                   .replace('m', 'male')
+                                                                   .replace('f', 'female')
                                                                    .strip(' '))
         elif column == 'inscription_date':
-            df_cine['inscription_date'] = df_cine['inscription_date'].apply(lambda x:
-                                                                                datetime.strftime(
-                                                                                    datetime.strptime(x, '%d-%m-%Y'),
-                                                                                    '%Y-%m-%d')
-                                                                                )
+            df_cine['inscription_date'] = df_cine['inscription_date'].apply(lambda x: datetime.strftime(
+                                                                                      datetime.strptime(x, '%d-%m-%Y'), 
+                                                                                      '%Y-%m-%d'))
 
     # Merge postal codes to Universidad del Cine DataFrame
     df_cine = df_cine.merge(df_cp, on='location', how='left')
@@ -172,15 +170,13 @@ def transform_uba_data(csv, txt):
         elif column == 'age':
             df_uba['age'] = df_uba['age'].apply(lambda x: calculate_age(x))
         elif column == 'gender':
-            df_uba['gender'] = df_uba['gender'].apply(lambda x: x.replace('m', 'male') \
-                                                                 .replace('f', 'female') \
+            df_uba['gender'] = df_uba['gender'].apply(lambda x: x.replace('m', 'male')
+                                                                 .replace('f', 'female')
                                                                  .strip(' '))
         elif column == 'inscription_date':
-            df_uba['inscription_date'] = df_uba['inscription_date'].apply(lambda x:
-                                                                            datetime.strftime(
-                                                                                datetime.strptime(x, '%d-%b-%y'),
-                                                                                '%Y-%m-%d')
-                                                                            )
+            df_uba['inscription_date'] = df_uba['inscription_date'].apply(lambda x: datetime.strftime(
+                                                                                    datetime.strptime(x, '%d-%b-%y')
+                                                                                    , '%Y-%m-%d'))
 
     # Merge postal codes to Universidad de Buenos Aires DataFrame
     df_uba = df_uba.merge(df_cp, on='postal_code', how='left')

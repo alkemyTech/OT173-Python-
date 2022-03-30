@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 
-default_args={
+default_args = {
     'depends_on_past': False,
     'email': ['airflow@example.com'],
     'email_on_failure': False,

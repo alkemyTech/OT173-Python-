@@ -33,7 +33,7 @@ def query_to_csv(**kwargs):  #With this function I will create de .csv files of 
     # root folder
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     print (root_dir)
-    # Create 'include/temp' folder if not exist
+    # Create 'include/temp' folder if not exist:
     new_folder = os.path.join(root_dir, 'include', 'tmp')
     os.makedirs(new_folder, exist_ok=True)
 

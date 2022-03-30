@@ -61,15 +61,15 @@ with DAG(
 
     # Extract data from Postgresql
     extract_data_pampa = PythonOperator(
-        task_id='execute_query_inter', 
-        python_callable=extract_data, 
+        task_id='execute_query_inter',
+        python_callable=extract_data,
         op_kwargs={
             'query_name': 'query_nacional_pampa.sql',
             'csv_name': 'nacional_pampa.csv'})
 
     extract_data_inter = PythonOperator(
-        task_id='execute_query_pampa', 
-        python_callable=extract_data, 
+        task_id='execute_query_pampa',
+        python_callable=extract_data,
         op_kwargs={
             'query_name': 'query_interamericana.sql',
             'csv_name': 'interamericana.csv'})

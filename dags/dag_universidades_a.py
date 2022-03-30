@@ -36,6 +36,7 @@ def query_to_csv(**kwargs):
     os.makedirs(new_folder, exist_ok=True)
 
     file_path = os.path.join(root_dir,'sql',kwargs['sql_file'])
+    print(file_path)
     with open(file_path) as file:
         query = text(file.read())
         result = conn.execute(query)
@@ -68,7 +69,7 @@ with DAG(
     tarea_2 = PythonOperator(task_id='Query_Villa_Maria',
                                 python_callable = query_to_csv,
                                 op_kwargs = {'sql_file':'query_villa_maria.sql',
-                                'file_name':'villa_maria.csv'})  # PythonOperator to do the query
+                                 'file_name':'villa_maria.csv'})  # PythonOperator to do the query
     tarea_3 = DummyOperator(task_id="Process_Data")      # PythonOperator to process the data with Pandas
     tarea_4 = DummyOperator(task_id="Charge_Data")  # Charge the data with S3Operator
 

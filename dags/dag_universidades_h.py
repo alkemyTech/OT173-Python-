@@ -65,7 +65,7 @@ def transform_cine_data(csv, txt):
                                                                    .strip(' '))
         elif column == 'inscription_date':
             df_cine['inscription_date'] = df_cine['inscription_date'].apply(lambda x: datetime.strftime(
-                                                                                      datetime.strptime(x, '%d-%m-%Y'), 
+                                                                                      datetime.strptime(x, '%d-%m-%Y'),
                                                                                       '%Y-%m-%d'))
 
     # Merge postal codes to Universidad del Cine DataFrame
@@ -175,8 +175,8 @@ def transform_uba_data(csv, txt):
                                                                  .strip(' '))
         elif column == 'inscription_date':
             df_uba['inscription_date'] = df_uba['inscription_date'].apply(lambda x: datetime.strftime(
-                                                                                    datetime.strptime(x, '%d-%b-%y')
-                                                                                    , '%Y-%m-%d'))
+                                                                                    datetime.strptime(x, '%d-%b-%y'),
+                                                                                    '%Y-%m-%d'))
 
     # Merge postal codes to Universidad de Buenos Aires DataFrame
     df_uba = df_uba.merge(df_cp, on='postal_code', how='left')

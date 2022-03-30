@@ -9,7 +9,6 @@ from airflow.operators.python import PythonOperator
 from decouple import config
 from sqlalchemy import create_engine, text
 
-
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
     datefmt='%Y-%m-%d'
@@ -44,17 +43,17 @@ with DAG(
         Args:
             query (str): The query file name and extension to be executed\
                 in the database.
-            example: query_universidades_c.sql
+            example: query_universidades_c.sql.
             university (str): The name of the university to be extracted.
-            example: 'universidad_de_los_andes'
+            example: 'universidad_de_los_andes'.
         """
-        DB_USER = config('DB_USER')
-        DB_PASSWORD = config('DB_PASSWORD')
-        DB_HOST = config('DB_HOST')
-        DB_PORT = config('DB_PORT')
-        DB_DATABASE = config('DB_DATABASE')
-        db_url = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:\
-            {DB_PORT}/{DB_DATABASE}"
+        db_user = config('DB_USER')
+        db_password = config('DB_PASSWORD')
+        db_host = config('DB_HOST')
+        db_port = config('DB_PORT')
+        db_database = config('DB_DATABASE')
+        db_url = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:\
+            {db_port}/{db_database}"
         base_path = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),

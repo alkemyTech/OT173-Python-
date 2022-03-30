@@ -1,7 +1,6 @@
 import logging
 import os
 from datetime import datetime, timedelta
-from pathlib import Path
 
 import pandas as pd
 from airflow import DAG
@@ -28,9 +27,9 @@ def extract_data(query_name, csv_name):
     with engine.connect() as conn:
         file = open(path_sql, 'r', encoding='utf-8')
         query = text(file.read())
-        ResultSet = conn.execute(query)
-        df = pd.DataFrame(ResultSet.fetchall())
-        df.columns = ResultSet.keys()
+        resultset = conn.execute(query)
+        df = pd.DataFrame(resultset.fetchall())
+        df.columns = resultset.keys()
         logging.info("query has been executed successfully")
 
     folder_csv = os.path.abspath(os.path.join(
@@ -62,16 +61,21 @@ with DAG(
 
     # Extract data from Postgresql
     extract_data_pampa = PythonOperator(
-        task_id='execute_query_inter', python_callable=extract_data, op_kwargs={'query_name': 'query_nacional_pampa.sql',
-                                                                                'csv_name': 'nacional_pampa.csv'})
+        task_id='execute_query_inter', 
+        python_callable=extract_data, 
+        op_kwargs={
+            'query_name': 'query_nacional_pampa.sql',
+            'csv_name': 'nacional_pampa.csv'})
+
     extract_data_inter = PythonOperator(
-        task_id='execute_query_pampa', python_callable=extract_data, op_kwargs={'query_name': 'query_interamericana.sql',
-                                                                                'csv_name': 'interamericana.csv'})
+        task_id='execute_query_pampa', 
+        python_callable=extract_data, 
+        op_kwargs={
+            'query_name': 'query_interamericana.sql',
+            'csv_name': 'interamericana.csv'})
 
     # Transform data with Pandas
-    #convert_to_csv = PythonOperator(task_id='convert_to_csv')
     preprocessing_data = DummyOperator(task_id='preprocessing_data')
-    #convert_to_txt = DummyOperator(task_id='convert_to_txt')
 
     # Load .txt to S3 server
     upload_data = DummyOperator(task_id='upload_data')

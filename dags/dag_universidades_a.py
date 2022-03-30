@@ -32,7 +32,7 @@ def query_to_csv(**kwargs):
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     print (root_dir)
     ## Create 'csv' folder if not exist
-    new_folder = os.path.join(root_dir, 'csv')
+    new_folder = os.path.join(root_dir, 'include', 'tmp')
     os.makedirs(new_folder, exist_ok=True)
 
     file_path = os.path.join(root_dir,'sql',kwargs['sql_file'])
@@ -42,7 +42,7 @@ def query_to_csv(**kwargs):
         result = conn.execute(query)
         df = pd.DataFrame(result.fetchall())
         df.columns = result.keys()
-        csv_path = os.path.join(root_dir, 'csv', kwargs['file_name'])
+        csv_path = os.path.join(root_dir,'include', 'tmp', kwargs['file_name'])
         df.to_csv(csv_path, sep = ',', index=False)
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),

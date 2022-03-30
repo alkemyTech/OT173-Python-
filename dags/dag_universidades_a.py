@@ -11,7 +11,8 @@ from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 
-# With this function I will create de engine to conect to the Database:
+
+# With this function I will create de engine to conect to the Database.
 def connect_function():
 
     # I take the credentials from .env:
@@ -21,7 +22,7 @@ def connect_function():
     DB_PORT = config('DB_PORT')
     DB_USER = config('DB_USER')
 
-    # Return de engine
+    # Return the engine
     engine = create_engine(f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
 
     return(engine.connect())
@@ -32,7 +33,7 @@ def query_to_csv(**kwargs):  #With this function I will create de .csv files of 
     # root folder
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     print (root_dir)
-    ## Create 'csv' folder if not exist
+    ## Create 'include/temp' folder if not exist
     new_folder = os.path.join(root_dir, 'include', 'tmp')
     os.makedirs(new_folder, exist_ok=True)
 

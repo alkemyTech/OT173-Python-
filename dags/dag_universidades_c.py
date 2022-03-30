@@ -4,9 +4,11 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 from airflow import DAG
-from airflow.hooks.postgres_hook import PostgresHook
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
+from decouple import config
+from sqlalchemy import create_engine, text
+
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
@@ -29,7 +31,7 @@ default_args = {
 with DAG(
         dag_id='dag_universidades_c',
         schedule_interval='@hourly',
-        start_date=datetime(2022, 3, 27),
+        start_date=datetime.now() - timedelta(days=1),
         catchup=False,
         default_args=default_args
         ) as dag:
@@ -40,35 +42,35 @@ with DAG(
         of the project.
 
         Args:
-            query (str): The query file to be executed in the database.
+            query (str): The query file name and extension to be executed\
+                in the database.
             example: query_universidades_c.sql
             university (str): The name of the university to be extracted.
             example: 'universidad_de_los_andes'
         """
+        DB_USER = config('DB_USER')
+        DB_PASSWORD = config('DB_PASSWORD')
+        DB_HOST = config('DB_HOST')
+        DB_PORT = config('DB_PORT')
+        DB_DATABASE = config('DB_DATABASE')
+        db_url = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:\
+            {DB_PORT}/{DB_DATABASE}"
         base_path = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
                 ".."))
         path_tmp = os.path.abspath(os.path.join(base_path, 'include', 'tmp'))
-        if not os.path.isdir(path_tmp):
-            os.makedirs(path_tmp)
+        os.makedirs(path_tmp, exist_ok=True)
         path_csv = os.path.join(path_tmp, university)
         path_query = os.path.join(base_path, 'sql', query)
-        pg_hook = PostgresHook(
-            postgres_conn_id='alkemy_db',
-            schema='training'
-        )
+
         with open(path_query, 'r') as file:
-            pg_hook = PostgresHook(
-                postgres_conn_id='alkemy_db',
-                schema='training'
-            )
-            pg_conn = pg_hook.get_conn()
-            df_to_csv = pd.read_sql(file.read(), pg_conn)
+            engine = create_engine(db_url)
+            df_to_csv = pd.read_sql(text(file.read()), engine)
             logger.info(f'{university} - {df_to_csv.shape}')
             df_to_csv.to_csv(path_csv)
 
-    # PythonOperator and PostgresHook to get the data from the database and
+    # PythonOperator to get the data from the database and
     #  save it in a csv file in the include/tmp folder of the project.
     extract_task_palermo = PythonOperator(
         task_id='extract_palermo',

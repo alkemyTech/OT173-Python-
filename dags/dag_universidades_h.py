@@ -2,10 +2,13 @@ import logging
 import os
 from datetime import datetime, timedelta
 
-import pandas as pd
+import boto3
+from botocore.exceptions import ClientError
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
+from decouple import config
+import pandas as pd
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
@@ -19,6 +22,39 @@ default_args = {
     'retries': 5,
     'retry_delay': timedelta(minutes=5)
 }
+
+# Instance directories
+current_dir = os.path.abspath(os.path.dirname(__file__))
+parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+
+
+def load_data(file_name, object_name=None):
+    """Upload a file to an S3 bucket
+
+    Args:
+
+        file_name (str): File to upload
+        object_name (str): S3 object name. If not specified then file_name is used
+
+    return True if file was uploaded, else False
+    """
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = os.path.basename(file_name)
+
+    # Upload the file
+    s3_client = boto3.client(
+                            's3',
+                            aws_access_key_id=config('AWS_PUBLIC_KEY'),
+                            aws_secret_access_key=config('AWS_SECRET_KEY')
+                        )
+    try:
+        s3_client.upload_file(f'{parent_dir}/files/{file_name}', config('AWS_BUCKET_NAME'), object_name)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
 
 # Global variables used in transform functions
 columns_types = {
@@ -234,7 +270,19 @@ with DAG(
                     )
 
     # Load data to S3 - S3 operator
-    load_uba = DummyOperator(task_id='load_uba')
-    load_cine = DummyOperator(task_id='load_cine')
+    load_uba = PythonOperator(
+                    task_id='load_uba',
+                    python_callable=load_data,
+                    op_kwargs={
+                        'file_name': 'transform_uba.txt'
+                        }
+                    )
+    load_cine = PythonOperator(
+                    task_id='load_cine',
+                    python_callable=load_data,
+                    op_kwargs={
+                        'file_name': 'transform_cine.txt'
+                        }
+                    )
 
     [extract_uba >> transform_uba >> load_uba, extract_cine >> transform_cine >> load_cine]

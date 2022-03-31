@@ -42,6 +42,7 @@ with DAG(
         task_id='extract_jujuy',
         dag=dag,
     )
+    
     # PythonOperator and pandas to read the csv file and create a /dataframe.
     # the procesed data are saved in .txt file
     transform_task = DummyOperator(

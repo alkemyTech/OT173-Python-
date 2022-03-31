@@ -9,6 +9,7 @@ from airflow.operators.python import PythonOperator
 from decouple import config
 from sqlalchemy import create_engine, text
 
+
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
                     format='%(asctime)s - %(name)s - %(message)s')
 

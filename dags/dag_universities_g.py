@@ -113,4 +113,5 @@ with DAG(
     dataprocess_task = PythonOperator(task_id='data_process', python_callable=data_process)
     savedata_task = PythonOperator(task_id='save_data', python_callable=save_data)
 
+    
     [getdata_sociales_task, getdata_kennedy_task] >> dataprocess_task >> savedata_task

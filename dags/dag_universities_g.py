@@ -3,12 +3,12 @@ from datetime import datetime, timedelta
 from time import strftime
 
 import pandas as pd
-
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from decouple import config
 from pathlib import Path
 from sqlalchemy import create_engine, text
+
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
                     format='%(asctime)s - %(name)s - %(message)s')

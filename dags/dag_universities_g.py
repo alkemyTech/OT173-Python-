@@ -44,7 +44,7 @@ def connect_db():
         logger.info('Connected to the DataBase!')
 
         return connection
-    except KeyError:
+    except:
         return logger.exception('Connection failed.')
 
 

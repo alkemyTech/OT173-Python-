@@ -27,7 +27,7 @@ def connect_function():
 
     return(engine.connect())
 
-def query_to_csv(**kwargs):  #With this function I will create de .csv files of Universities A
+def query_to_csv(**kwargs):  # With this function I will create de .csv files of Universities A
    
     conn = connect_function()
     # root folder

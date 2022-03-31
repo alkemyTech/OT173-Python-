@@ -20,12 +20,69 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
+# Global variables used in transform functions
+columns_types = {
+                'university': 'string',
+                'career': 'string',
+                'inscription_date': 'string',
+                'first_name': 'string',
+                'last_name': 'string',
+                'gender': 'category',
+                'age': 'int64',
+                'postal_code': 'string',
+                'location': 'string',
+                'email': 'string'
+                }
+delete_abreviations = {
+                    'mr.': '',
+                    'dr.': '',
+                    'mrs.': '',
+                    'ms.': '',
+                    'md': '',
+                    'dds': '',
+                    'jr.': '',
+                    'dvm': '',
+                    'phd': ''
+                }
+sort_columns = [
+                'university',
+                'career',
+                'inscription_date',
+                'first_name',
+                'last_name',
+                'gender',
+                'age',
+                'postal_code',
+                'location',
+                'email'
+                ]
 
-def transform_cine_data(csv, txt):
+
+def calculate_age(born, born_datefmt):
+    """Calculates age from date of birth. Returns age as integer
+
+    Args:
+        born (str): formatted date in string type.
+        born_datefmt (str): input date format to be interpreted by function to read data. e.g.: %y-%b-%d. for 90-Jan-01.
+    """
+    born = datetime.strptime(born, born_datefmt)
+    today = datetime.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    if age < 0:
+        age += 100
+    return age
+
+
+def transform_cine_data(csv, txt, born_datefmt):
     """Function for transform data from Universidad del Cine previously extracted from Postgres database.
         - Read previously extracted csv
         - Import postal code asset csv
         - Transform data to make a .txt output prepared to be loaded to S3
+
+    Args:
+        csv (str): input filename, extracted data
+        txt (str): output filename, transformed data
+        born_datefmt (str): date format used in calculate_age function
     """
     # Instance directories
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -40,24 +97,13 @@ def transform_cine_data(csv, txt):
     # Transform data from Universidad del Cine
     df_cine = df_cine.drop(['Unnamed: 0'], axis=1)
     df_cine = df_cine.convert_dtypes()
-
-    def calculate_age(born):
-        """Calculates age from date of birth. Returns age as integer
-
-        Args:
-            born (str): date with format %d-%m-%Y. e.g.: 01-01-1990.
-        """
-        born = datetime.strptime(born, '%d-%m-%Y')
-        today = datetime.today()
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
     for column in df_cine.columns:
         if column in ['university', 'career', 'name', 'location']:
             df_cine[column] = df_cine[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
         elif column == 'email':
             df_cine[column] = df_cine[column].apply(lambda x: x.lower().strip(' '))
         elif column == 'age':
-            df_cine['age'] = df_cine['age'].apply(lambda x: calculate_age(x))
+            df_cine['age'] = df_cine['age'].apply(lambda x: calculate_age(x, born_datefmt))
         elif column == 'gender':
             df_cine['gender'] = df_cine['gender'].apply(lambda x: x.lower()
                                                                    .replace('m', 'male')
@@ -72,18 +118,6 @@ def transform_cine_data(csv, txt):
     df_cine = df_cine.merge(df_cp, on='location', how='left')
 
     # Delete abreviations in name column
-    delete_abreviations = {
-                        'mr.': '',
-                        'dr.': '',
-                        'mrs.': '',
-                        'ms.': '',
-                        'md': '',
-                        'dds': '',
-                        'jr.': '',
-                        'dvm': '',
-                        'phd': ''
-                    }
-
     for abreviation, blank in delete_abreviations.items():
         df_cine['name'] = df_cine['name'].apply(lambda x: x.replace(abreviation, blank))
 
@@ -95,45 +129,25 @@ def transform_cine_data(csv, txt):
     df_cine = df_cine.drop(['name'], axis=1)
 
     # Set column types
-    cine_columns_type = {
-                        'university': 'string',
-                        'career': 'string',
-                        'inscription_date': 'string',
-                        'first_name': 'string',
-                        'last_name': 'string',
-                        'gender': 'category',
-                        'age': 'int64',
-                        'postal_code': 'string',
-                        'location': 'string',
-                        'email': 'string'
-                    }
-
-    for column, type_column in cine_columns_type.items():
+    for column, type_column in columns_types.items():
         df_cine[column] = df_cine[column].astype(type_column)
 
     # Sorting columns
-    sort_columns = [
-                    'university',
-                    'career',
-                    'inscription_date',
-                    'first_name',
-                    'last_name',
-                    'gender',
-                    'age',
-                    'postal_code',
-                    'location',
-                    'email'
-                    ]
     df_cine = df_cine[sort_columns]
 
     return df_cine.to_csv(f'{parent_dir}/files/{txt}', encoding='utf-8', index=False, sep='\t')
 
 
-def transform_uba_data(csv, txt):
+def transform_uba_data(csv, txt, born_datefmt):
     """Function for transform data from Universidad de Buenos Aires previously extracted from Postgres database.
         - Read previously extracted csv
         - Import postal code asset csv
         - Transform data to make a .txt output prepared to be loaded to S3
+
+    Args:
+        csv (str): input filename, extracted data
+        txt (str): output filename, transformed data
+        born_datefmt (str): date format used in calculate_age function
     """
     # Instance directories
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -148,27 +162,13 @@ def transform_uba_data(csv, txt):
     # Transform data from Universidad de Buenos Aires
     df_uba = df_uba.drop(['Unnamed: 0'], axis=1)
     df_uba = df_uba.convert_dtypes()
-
-    def calculate_age(born):
-        """Calculates age from date of birth. Returns age as integer
-
-        Args:
-            born (str): date with format %y-%b-%d. e.g.: 90-Jan-01.
-        """
-        born = datetime.strptime(born, '%y-%b-%d')
-        today = datetime.today()
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-        if age < 0:
-            age += 100
-        return age
-
     for column in df_uba.columns:
         if column in ['university', 'career', 'name', 'location']:
             df_uba[column] = df_uba[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
         elif column == 'email':
             df_uba[column] = df_uba[column].apply(lambda x: x.lower().strip(' '))
         elif column == 'age':
-            df_uba['age'] = df_uba['age'].apply(lambda x: calculate_age(x))
+            df_uba['age'] = df_uba['age'].apply(lambda x: calculate_age(x, born_datefmt))
         elif column == 'gender':
             df_uba['gender'] = df_uba['gender'].apply(lambda x: x.replace('m', 'male')
                                                                  .replace('f', 'female')
@@ -182,18 +182,6 @@ def transform_uba_data(csv, txt):
     df_uba = df_uba.merge(df_cp, on='postal_code', how='left')
 
     # Delete abreviations in name column
-    delete_abreviations = {
-                        'mr.': '',
-                        'dr.': '',
-                        'mrs.': '',
-                        'ms.': '',
-                        'md': '',
-                        'dds': '',
-                        'jr.': '',
-                        'dvm': '',
-                        'phd': ''
-                    }
-
     for abreviation, blank in delete_abreviations.items():
         df_uba['name'] = df_uba['name'].apply(lambda x: x.replace(abreviation, blank))
 
@@ -205,35 +193,10 @@ def transform_uba_data(csv, txt):
     df_uba = df_uba.drop(['name'], axis=1)
 
     # Set column types
-    uba_columns_type = {
-                        'university': 'string',
-                        'career': 'string',
-                        'inscription_date': 'string',
-                        'first_name': 'string',
-                        'last_name': 'string',
-                        'gender': 'category',
-                        'age': 'int64',
-                        'postal_code': 'string',
-                        'location': 'string',
-                        'email': 'string'
-                    }
-
-    for column, type_column in uba_columns_type.items():
+    for column, type_column in columns_types.items():
         df_uba[column] = df_uba[column].astype(type_column)
 
     # Sorting columns
-    sort_columns = [
-                    'university',
-                    'career',
-                    'inscription_date',
-                    'first_name',
-                    'last_name',
-                    'gender',
-                    'age',
-                    'postal_code',
-                    'location',
-                    'email'
-                    ]
     df_uba = df_uba[sort_columns]
 
     return df_uba.to_csv(f'{parent_dir}/files/{txt}', encoding='utf-8', index=False, sep='\t')
@@ -256,7 +219,8 @@ with DAG(
                     python_callable=transform_uba_data,
                     op_kwargs={
                         'csv': 'extract_uba.csv',
-                        'txt': 'transform_uba.txt'
+                        'txt': 'transform_uba.txt',
+                        'born_datefmt': '%y-%b-%d'
                         }
                     )
     transform_cine = PythonOperator(
@@ -264,7 +228,8 @@ with DAG(
                     python_callable=transform_cine_data,
                     op_kwargs={
                         'csv': 'extract_cine.csv',
-                        'txt': 'transform_cine.txt'
+                        'txt': 'transform_cine.txt',
+                        'born_datefmt': '%d-%m-%Y'
                         }
                     )
 

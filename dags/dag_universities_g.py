@@ -1,6 +1,10 @@
 import logging
+import pandas as pd
+from pathlib import Path
 from datetime import datetime, timedelta
 from time import strftime
+from decouple import config
+from sqlalchemy import create_engine, text
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -21,11 +25,52 @@ default_args = {
     'retry_delay': timedelta(minutes=5),  # Wait 5 minutes to try to run the script again
 }
 
+def connect_db():
+    """ Connect to db """
 
-def get_data():
-    """ Get data from SQL"""
+    try: 
+        DB_DATABASE = config('DB_DATABASE')
+        DB_HOST = config('DB_HOST')
+        DB_PASSWORD = config('DB_PASSWORD')
+        DB_PORT = config('DB_PORT')
+        DB_USER = config('DB_USER')
+
+        engine = create_engine(f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
+
+        connection = engine.connect()
+
+        logger.info('Connected to the DataBase!')
+
+        return connection
+    except:
+        return logger.exception('Connection failed.')
+
+
+def get_data(**kwargs):
+    """ Get data from SQL and convert to CSV """
+
+    # connect_db()
+    connection = connect_db()
+    
+    root_dir = Path(__file__).resolve().parent.parent
+
+    file_path = Path(f'{root_dir}/sql/{kwargs["sql_file"]}')
+    
+    with open(file_path) as f:
+        # passing a plain string directly to Connection.execute() is deprecated
+        # and we should use text() to specify a plain SQL query string instead.
+        sql_text = text(f.read())
+        result = connection.execute(sql_text)
+        df = pd.DataFrame(result.fetchall())
+        df.columns = result.keys()
+        csv_path = Path(f"{root_dir}/csv").mkdir(parents=True, exist_ok=True)
+        csv_path = str(csv_path)
+        file_csv = df.to_csv(f"{root_dir}/csv/{kwargs['file_name']}")
 
     logger.info('Getting data')
+
+    # return df
+    return file_csv
 
 
 def data_process():
@@ -41,15 +86,29 @@ def save_data():
 
 
 with DAG(
-    'Dag_Universities_G',
+    'dag_universities_g',
     default_args=default_args,
     description='Dag Universities',
     schedule_interval='@hourly',
     start_date=datetime(2022, 3, 23),
     tags=['universities'],
 ) as dag:
-    getdata_sociales_task = PythonOperator(task_id='get_data_sociales', python_callable=get_data)
-    getdata_kennedy_task = PythonOperator(task_id='get_data_kennedy', python_callable=get_data)
+    getdata_sociales_task = PythonOperator(
+        task_id='get_data_sociales',
+        python_callable=get_data,
+        op_kwargs={
+            'sql_file': 'query_sociales.sql',
+            'file_name': 'sociales.csv'
+        }
+    )
+    getdata_kennedy_task = PythonOperator(
+        task_id='get_data_kennedy',
+        python_callable=get_data,
+        op_kwargs={
+            'sql_file': 'query_kenedy.sql',
+            'file_name': 'kenedy.csv'
+        }
+    )
     dataprocess_task = PythonOperator(task_id='data_process', python_callable=data_process)
     savedata_task = PythonOperator(task_id='save_data', python_callable=save_data)
 

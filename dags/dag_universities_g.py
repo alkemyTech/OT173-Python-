@@ -2,7 +2,6 @@ import logging
 from datetime import datetime, timedelta
 from time import strftime
 
-
 import pandas as pd
 from decouple import config
 from pathlib import Path

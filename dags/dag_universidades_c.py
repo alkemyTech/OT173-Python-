@@ -57,4 +57,3 @@ with DAG(
     )
 
     [extract_task_palermo, extract_task_jujuy] >> transform_task >> load_task
-    

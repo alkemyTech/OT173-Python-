@@ -80,7 +80,7 @@ with DAG(
                         'file_name': 'villa_maria.csv'
                         }
                     )
-    
+
     tarea_3 = DummyOperator(task_id="Process_Data")      # PythonOperator to process the data with Pandas
     tarea_4 = DummyOperator(task_id="Charge_Data")  # Charge the data with S3Operator
 

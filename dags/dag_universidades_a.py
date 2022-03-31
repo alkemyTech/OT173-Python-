@@ -29,7 +29,7 @@ def connect_function():
 
 
 def query_to_csv(**kwargs):  # With this function I will create de .csv files of Universities A
-   
+
     conn = connect_function()
     # root folder
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -38,15 +38,16 @@ def query_to_csv(**kwargs):  # With this function I will create de .csv files of
     new_folder = os.path.join(root_dir, 'include', 'tmp')
     os.makedirs(new_folder, exist_ok=True)
 
-    file_path = os.path.join(root_dir,'sql',kwargs['sql_file'])
+    file_path = os.path.join(root_dir, 'sql', kwargs['sql_file'])
     print(file_path)
     with open(file_path) as file:
         query = text(file.read())
         result = conn.execute(query)
         df = pd.DataFrame(result.fetchall())
         df.columns = result.keys()
-        csv_path = os.path.join(root_dir,'include', 'tmp', kwargs['file_name'])
-        df.to_csv(csv_path, sep = ',', index=False)
+        csv_path = os.path.join(root_dir, 'include', 'tmp', kwargs['file_name'])
+        df.to_csv(csv_path, sep=',', index=False)
+
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
                     format='%(asctime)s - %(name)s - %(message)s')

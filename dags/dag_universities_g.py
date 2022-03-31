@@ -1,13 +1,13 @@
 import logging
-import pandas as pd
-from pathlib import Path
 from datetime import datetime, timedelta
 from time import strftime
-from decouple import config
-from sqlalchemy import create_engine, text
 
+import pandas as pd
+from decouple import config
+from pathlib import Path
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from sqlalchemy import create_engine, text
 
 logging.basicConfig(level=logging.INFO, datefmt=strftime("%Y-%m-%d"),
                     format='%(asctime)s - %(name)s - %(message)s')
@@ -29,20 +29,20 @@ def connect_db():
     """ Connect to db """
 
     try: 
-        DB_DATABASE = config('DB_DATABASE')
-        DB_HOST = config('DB_HOST')
-        DB_PASSWORD = config('DB_PASSWORD')
-        DB_PORT = config('DB_PORT')
-        DB_USER = config('DB_USER')
+        db_database = config('DB_DATABASE')
+        db_host = config('DB_HOST')
+        db_password = config('DB_PASSWORD')
+        db_port = config('DB_PORT')
+        db_user = config('DB_USER')
 
-        engine = create_engine(f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}')
+        engine = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}')
 
         connection = engine.connect()
 
         logger.info('Connected to the DataBase!')
 
         return connection
-    except:
+    except KeyError:
         return logger.exception('Connection failed.')
 
 
@@ -51,11 +51,10 @@ def get_data(**kwargs):
 
     # connect_db()
     connection = connect_db()
-    
-    root_dir = Path(__file__).resolve().parent.parent
 
+    root_dir = Path(__file__).resolve().parent.parent
     file_path = Path(f'{root_dir}/sql/{kwargs["sql_file"]}')
-    
+
     with open(file_path) as f:
         # passing a plain string directly to Connection.execute() is deprecated
         # and we should use text() to specify a plain SQL query string instead.

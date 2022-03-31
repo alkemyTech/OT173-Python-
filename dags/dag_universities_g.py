@@ -30,7 +30,7 @@ default_args = {
 def connect_db():
     """ Connect to db """
 
-    try: 
+    try:
         db_database = config('DB_DATABASE')
         db_host = config('DB_HOST')
         db_password = config('DB_PASSWORD')
@@ -44,7 +44,7 @@ def connect_db():
         logger.info('Connected to the DataBase!')
 
         return connection
-    except:
+    except KeyError:
         return logger.exception('Connection failed.')
 
 

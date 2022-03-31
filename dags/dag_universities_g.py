@@ -2,10 +2,11 @@ import logging
 from datetime import datetime, timedelta
 from time import strftime
 
-import pandas as pd
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from decouple import config
+import pandas as pd
 from pathlib import Path
 from sqlalchemy import create_engine, text
 

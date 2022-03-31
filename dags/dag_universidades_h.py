@@ -49,7 +49,7 @@ def load_data(file_name, object_name=None):
                             aws_secret_access_key=config('AWS_SECRET_KEY')
                         )
     try:
-        response = s3_client.upload_file(f'{parent_dir}/files/{file_name}', config('AWS_BUCKET_NAME'), object_name)
+        s3_client.upload_file(f'{parent_dir}/files/{file_name}', config('AWS_BUCKET_NAME'), object_name)
     except ClientError as e:
         logging.error(e)
         return False

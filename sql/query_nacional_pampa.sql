@@ -7,7 +7,6 @@ SELECT
    sexo AS gender,
    nacimiento AS age,
    codgoposstal AS postal_code,
-   direccion AS location,
    eemail AS email 
 FROM
    moron_nacional_pampa 

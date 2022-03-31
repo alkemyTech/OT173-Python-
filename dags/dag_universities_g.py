@@ -25,6 +25,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),  # Wait 5 minutes to try to run the script again
 }
 
+
 def connect_db():
     """ Connect to db """
 

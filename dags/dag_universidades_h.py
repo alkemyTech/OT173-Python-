@@ -39,8 +39,6 @@ def extract_data(sql, csv):
     db_port = config('DB_PORT')
     db_database = config('DB_DATABASE')
     url = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}'
-    engine = create_engine(url, encoding='utf8')
-    con = engine.connect()
 
     # Instance directories
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -49,6 +47,8 @@ def extract_data(sql, csv):
     # Execute SQl query
     file_path = f'{parent_dir}/sql/{sql}'
     with open(file_path, 'r') as file:
+        engine = create_engine(url, encoding='utf8')
+        con = engine.connect()
         query = text(file.read())
         df = pd.read_sql(query, con)
         logger.info(sql + csv)

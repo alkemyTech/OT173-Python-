@@ -116,7 +116,7 @@ def processing_flores():
 
 def processing_villa_maria():
     df_villa_maria = pd.read_csv(f'{root_folder}/include/tmp/villa_maria.csv')
-    df_cp = pd.read_csv(f'{root_folder}/include/tmp/codigos_postales.csv', encoding='utf-8')
+    df_cp = pd.read_csv(f'{root_folder}/files/codigos_postales.csv', encoding='utf-8')
     df_cp.rename(columns={'localidad': 'location', 'codigo_postal': 'postal_code'}, inplace=True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
 

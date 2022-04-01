@@ -38,7 +38,7 @@ def extract_data(query_name, csv_name):
         logging.info("query has been executed successfully")
 
     folder_csv = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..', 'csv'))
+        os.path.dirname(__file__), '..', 'files'))
     if not os.path.exists(folder_csv):
         logging.info("folder was created successfully")
         os.mkdir(folder_csv)

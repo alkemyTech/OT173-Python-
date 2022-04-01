@@ -2,7 +2,6 @@ import logging
 import os
 from os import path
 from datetime import date, datetime, timedelta
-from time import strftime
 
 import pandas as pd
 from airflow import DAG
@@ -11,7 +10,7 @@ from airflow.operators.python import PythonOperator
 from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
-
+from time import strftime
 
 # With this function I will create de engine to conect to the Database.
 def connect_function():
@@ -81,7 +80,7 @@ def processing_flores():
         df_flores[col] = df_flores[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     df_flores['gender'] = df_flores['gender'].apply(lambda x: x.lower().replace('m', 'male')
-    .replace('f', 'female').strip(' '))
+        .replace('f', 'female').strip(' '))
     df_flores['age'] = df_flores['age'].apply(age_calc)
 
     titles = {
@@ -128,9 +127,8 @@ def processing_villa_maria():
         df_villa_maria[col] = df_villa_maria[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     df_villa_maria['gender'] = df_villa_maria['gender'].apply(lambda x: x.lower()
-                                                                .replace('m', 'male')
-                                                                .replace('f', 'female')
-                                                                .strip(' '))
+        .replace('m', 'male').replace('f', 'female').strip(' '))
+
     df_villa_maria['age'] = df_villa_maria['age'].apply(age_calc2)
 
     df_villa_maria = df_villa_maria.merge(df_cp, on='location', how='left')
@@ -161,7 +159,7 @@ def processing_villa_maria():
                                                                                     '%Y-%m-%d'))
 
     df_villa_maria = df_villa_maria[['university', 'career', 'inscription_date',
-        'first_name', 'last_name', 'gender', 'age', 'postal_code', 'location', 'email']]
+            'first_name', 'last_name', 'gender', 'age', 'postal_code', 'location', 'email']]
 
     df_villa_maria.to_csv(f'{root_folder}/include/tmp/villa_maria.txt', index=None)
 

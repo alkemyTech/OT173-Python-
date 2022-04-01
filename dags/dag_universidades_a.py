@@ -54,23 +54,24 @@ root_folder = path.abspath(path.join(path.dirname(__file__), ".."))
 
 
 def age_calc(born):
-        born = datetime.strptime(born, "%Y-%m-%d").date()
+        born = datetime.strptime(born,"%Y-%m-%d").date()
         today = date.today()
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
+
 def age_calc2(born):
-        born = datetime.strptime(born, "%d-%b-%y").date()
+        born = datetime.strptime(born,"%d-%b-%y").date()
         today = date.today()
         age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
         if age < 0:
-             age += 100
+            age += 100
         return age
 
 
 def processing_flores():
     df_flores = pd.read_csv(f'{root_folder}/include/tmp/flores.csv')
-    
+
     for col in df_flores.columns:
         if col != 'age':
             df_flores[col] = df_flores[col].astype('string')
@@ -80,11 +81,11 @@ def processing_flores():
         df_flores[col] = df_flores[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     df_flores['gender'] = df_flores['gender'].apply(lambda x: x.lower()
-                                                                   .replace('m', 'male')
-                                                                   .replace('f', 'female')
-                                                                   .strip(' '))
+                                                                .replace('m','male')
+                                                                .replace('f','female')
+                                                                .strip(' '))
     df_flores['age'] = df_flores['age'].apply(age_calc)
-    
+
     titles = {
                     'mr.': '',
                     'dr.': '',
@@ -96,10 +97,10 @@ def processing_flores():
                     'dvm': '',
                     'phd': ''
                 }
-    
+
     for title, blank in titles.items():
         df_flores['name'] = df_flores['name'].apply(lambda x: x.replace(title, blank))
-    
+
     df_flores['name'] = df_flores['name'].apply(lambda x: x.strip(' '))
     df_flores['name'] = df_flores['name'].astype('string')
     df_flores['first_name'] = df_flores['name'].apply(lambda x: x.split(' ')[0])
@@ -129,11 +130,11 @@ def processing_villa_maria():
         df_villa_maria[col] = df_villa_maria[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     df_villa_maria['gender'] = df_villa_maria['gender'].apply(lambda x: x.lower()
-                                                                   .replace('m', 'male')
-                                                                   .replace('f', 'female')
-                                                                   .strip(' '))
+                                                                .replace('m','male')
+                                                                .replace('f','female')
+                                                                .strip(' '))
     df_villa_maria['age'] = df_villa_maria['age'].apply(age_calc2)
-    
+
     df_villa_maria = df_villa_maria.merge(df_cp, on='location', how='left')
 
     titles = {
@@ -147,10 +148,10 @@ def processing_villa_maria():
                     'dvm': '',
                     'phd': ''
                 }
-    
+
     for title, blank in titles.items():
         df_villa_maria['name'] = df_villa_maria['name'].apply(lambda x: x.replace(title, blank))
-    
+
     df_villa_maria['name'] = df_villa_maria['name'].apply(lambda x: x.strip(' '))
     df_villa_maria['name'] = df_villa_maria['name'].astype('string')
     df_villa_maria['first_name'] = df_villa_maria['name'].apply(lambda x: x.split('_')[0])
@@ -162,9 +163,9 @@ def processing_villa_maria():
                                                                                     '%Y-%m-%d'))
 
     df_villa_maria = df_villa_maria[['university', 'career', 'inscription_date',
-                           'first_name', 'last_name',
-                           'gender', 'age', 'postal_code', 'location',
-                           'email']]
+                        'first_name', 'last_name',
+                        'gender', 'age', 'postal_code', 'location',
+                        'email']]
 
     df_villa_maria.to_csv(f'{root_folder}/include/tmp/villa_maria.txt', index=None)
 
@@ -211,7 +212,7 @@ with DAG(
         task_id='Processing_Villa_Maria',
         python_callable=processing_villa_maria,
         dag=dag
-    )  # PythonOperator to process data with Pandas 
+    )  # PythonOperator to process data with Pandas
     tarea_5 = DummyOperator(task_id='Charge_Data_Flores')  # Charge the data of Flores with S3Operator
     tarea_6 = DummyOperator(task_id='Charge_Data_Villa_Maria')  # Charge the data of Villa Maria with S3Operator
 

@@ -59,15 +59,13 @@ def age_calc(born):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
-
 def age_calc2(born):
-        born = datetime.strptime(born,"%d-%b-%y").date()
-        today = date.today()
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-        if age < 0:
-            age += 100
-        return age
-
+    born = datetime.strptime(born, "%d-%b-%y").date()
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    if age < 0:
+        age += 100
+    return age
 
 
 def processing_flores():
@@ -81,10 +79,7 @@ def processing_flores():
     for col in columnas:
         df_flores[col] = df_flores[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
-    df_flores['gender'] = df_flores['gender'].apply(lambda x: x.lower()
-                                                            .replace('m', 'male')
-                                                            .replace('f', 'female')
-                                                            .strip(' '))
+    df_flores['gender'] = df_flores['gender'].apply(lambda x: x.lower().replace('m', 'male').replace('f', 'female').strip(' '))
     df_flores['age'] = df_flores['age'].apply(age_calc)
 
     titles = {
@@ -163,8 +158,8 @@ def processing_villa_maria():
                                                                                     datetime.strptime(x, '%d-%b-%y'),
                                                                                     '%Y-%m-%d'))
 
-    df_villa_maria = df_villa_maria[['university', 'career', 'inscription_date',
-                    'first_name', 'last_name', 'gender', 'age', 'postal_code', 'location', 'email']]
+    df_villa_maria = df_villa_maria[['university', 'career', 'inscription_date', 
+    'first_name', 'last_name', 'gender', 'age', 'postal_code', 'location', 'email']]
 
     df_villa_maria.to_csv(f'{root_folder}/include/tmp/villa_maria.txt', index=None)
 

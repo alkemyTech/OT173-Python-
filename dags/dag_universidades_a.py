@@ -128,7 +128,7 @@ def processing_villa_maria():
         df_villa_maria[col] = df_villa_maria[col].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     df_villa_maria['gender'] = df_villa_maria['gender'].apply(lambda x: x.lower()
-                                                            .replace('m', 'male').replace('f', 'female').strip(' '))
+                                                              .replace('m', 'male').replace('f', 'female').strip(' '))
 
     df_villa_maria['age'] = df_villa_maria['age'].apply(age_calc2)
 

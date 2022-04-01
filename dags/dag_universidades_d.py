@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
@@ -46,4 +46,3 @@ with DAG(
     )
 
     [extract_task_utn, extract_task_tres_de_febrero] >> process_task >> upload_task
-    

@@ -15,7 +15,7 @@ from sqlalchemy.sql import text
 
 # With this function I will create de engine to conect to the Database.
 def connect_function():
-    
+
     # I take the credentials from .env:
     db_database = config('DB_DATABASE')
     db_host = config('DB_HOST')

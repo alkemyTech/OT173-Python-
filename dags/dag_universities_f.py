@@ -8,9 +8,9 @@ logger = logging.getLogger(__name__)
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
-     datefmt='%Y-%m-%d',
-     level=logging.INFO,
-     filename='test.log')
+    datefmt='%Y-%m-%d',
+    level=logging.INFO,
+    filename='test.log')
 
 with DAG(
     'dag_universities_f',

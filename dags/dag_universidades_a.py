@@ -1,14 +1,14 @@
 import logging
 import os
 from os import path
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta, date
 from time import strftime
 
+import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from decouple import config
-import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 

@@ -2,10 +2,11 @@ import logging
 import os
 from datetime import datetime, timedelta
 
+import boto3
 import pandas as pd
 from airflow import DAG
-from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
+from botocore.exceptions import ClientError
 from decouple import config
 from sqlalchemy import create_engine, text
 
@@ -225,6 +226,41 @@ with DAG(
         df.to_csv(path_txt, sep=',', index=False)
         logger.info(f"Saved {university}.txt")
 
+    def upload_txt(file_name, object_name=None):
+        """pythonOprator to upload the data to the s3 bucket
+
+        Args:
+            file_name (str): the name of the file to be uploaded.
+            object_name (str, optional): the name of the object to be uploaded\
+                . Defaults to None.
+
+        Raises:
+            e: if the file is not found.
+        """
+
+        if object_name is None:
+            object_name = os.path.basename(file_name)
+        logger.info(f"Loading {object_name}")
+        path_txt = os.path.abspath(
+            os.path.join(base_path, 'include', file_name)
+            )
+
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=config('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY'),
+            )
+        try:
+            logger.info(f"Uploading {object_name}")
+            s3_client.upload_file(
+                path_txt,
+                config('AWS_S3_BUCKET'),
+                object_name,
+                )
+        except ClientError as e:
+            logger.error(e)
+            raise e
+
     # PythonOperator to get the data from the database and
     #  save it in a csv file in the include/tmp folder of the project.
     extract_task_palermo = PythonOperator(
@@ -265,12 +301,18 @@ with DAG(
 
     # PythonOperator and boto3 to upload the .txt file to S3.
     # The file is deleted after the upload.
-    load_task = DummyOperator(
-        task_id='load',
+    upload_task_palermo = PythonOperator(
+        task_id='load_palermo',
+        python_callable=upload_txt,
+        op_kwargs={'file_name': 'palermo.txt'},
+        dag=dag,
+    )
+    upload_task_jujuy = PythonOperator(
+        task_id='load_jujuy',
+        python_callable=upload_txt,
+        op_kwargs={'file_name': 'universidad_nacional_de_jujuy.txt'},
         dag=dag,
     )
 
-    [
-        extract_task_palermo >> transform_task_palermo,
-        extract_task_jujuy >> transform_task_jujuy
-        ] >> load_task
+    extract_task_palermo >> transform_task_palermo >> upload_task_palermo
+    extract_task_jujuy >> transform_task_jujuy >> upload_task_jujuy

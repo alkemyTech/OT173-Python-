@@ -4,7 +4,7 @@ SELECT university,
     nombre as "name",
     sexo as gender,
     birth_date as age,
-    direccion as "location",
+    location,
     email
 FROM jujuy_utn
 WHERE university = 'universidad nacional de jujuy'

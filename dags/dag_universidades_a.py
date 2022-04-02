@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import date, datetime, timedelta
 from os import path
+from time import strftime
 
 import pandas as pd
 from airflow import DAG
@@ -10,7 +11,7 @@ from airflow.operators.python import PythonOperator
 from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
-from time import strftime
+
 
 
 # With this function I will create de engine to conect to the Database.

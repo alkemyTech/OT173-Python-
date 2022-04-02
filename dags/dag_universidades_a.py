@@ -53,13 +53,7 @@ def query_to_csv(**kwargs):  # With this function I will create de .csv files of
 root_folder = path.abspath(path.join(path.dirname(__file__), ".."))
 
 
-def age_calc(born):
-    born = datetime.strptime(born, "%Y-%m-%d").date()
-    today = date.today()
-    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-    return age
-
-
+# With this function we can obtain the age of Villa Maria database
 def age_calc2(born):
     born = datetime.strptime(born, "%d-%b-%y").date()
     today = date.today()
@@ -69,6 +63,15 @@ def age_calc2(born):
     return age
 
 
+# With this function we can obtain the age of Flores database
+def age_calc(born):
+    born = datetime.strptime(born, "%Y-%m-%d").date()
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    return age
+
+
+# This function process de data of Flores database
 def processing_flores():
     df_flores = pd.read_csv(f'{root_folder}/include/tmp/flores.csv')
 

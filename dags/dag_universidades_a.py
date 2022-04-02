@@ -4,11 +4,11 @@ from datetime import date, datetime, timedelta
 from os import path
 from time import strftime
 
-import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from decouple import config
+import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 

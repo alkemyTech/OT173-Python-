@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import datetime, timedelta
+from venv import create
 
 import pandas as pd
 from airflow import DAG
@@ -62,14 +63,18 @@ with DAG(
         db_database = config('DB_DATABASE')
         db_url = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:\
             {db_port}/{db_database}"
+        logger.info(f"Connecting to database")
         os.makedirs(path_tmp, exist_ok=True)
         path_csv = os.path.join(path_tmp, university)
         path_query = os.path.join(base_path, 'sql', query)
-
         with open(path_query, 'r') as file:
+            logger.info(f"Reading query file")
             engine = create_engine(db_url)
+            logger.info("create engine")
             df_to_csv = pd.read_sql(text(file.read()), engine)
+            logger.info("read query")
             df_to_csv.to_csv(path_csv)
+            logger.info("write csv")
 
     def transform_palermo(university, csv_file):
         """PythonOperator and Pandas to transform the data in the csv file
@@ -81,24 +86,27 @@ with DAG(
 
         Returns:
             _type_: _description_
-        """        """"""
+        """
+        logger.info(f"Transforming {university}")
         path_csv = os.path.join(path_tmp, csv_file)
+        logger.info(f"Reading csv file")
         # Read the data
         df = pd.read_csv(path_csv, sep=',', header=0, index_col=0)
         # normalize the data
+        logger.info(f"Normalizing data")
         for col in df[['university', 'career', 'name', 'email']]:
             df[col] = df[col].str.lower()
             df[col] = df[col].str.replace("-", " ")
             df[col] = df[col].str.replace("_", " ")
             df[col] = df[col].str.strip()
         # replace name values
+        logger.info(f"Replacing name values")
         df['name'] = df['name'].str.lower()
         df['name'] = df['name'].str.replace("dr.", " ")
         df['name'] = df['name'].str.replace("dra.", " ")
         df['name'] = df['name'].str.replace("ms.", " ")
         df['name'] = df['name'].str.replace("mrs.", " ")
         df['name'] = df['name'].str.strip()
-
         # replace gender "f" and "m" for female an male
         df['gender'] = df['gender'].str.lower()
         df['gender'] = df['gender'].str.replace("-", " ")
@@ -107,11 +115,13 @@ with DAG(
         df['gender'] = df['gender'].str.strip()
         # postal_code to string
         df['postal_code'] = df['postal_code'].astype(str)
-
+        logger.info('split name to generate first_name and last_name')
         # split name to generate first_name and last_name
         df['first_name'] = df['name'].str.split().str.get(0)
         df['last_name'] = df['name'].str.split().str.get(1)
+        logger.info('split name to generate first name and last_name')
         df = df.drop('name', axis=1)
+        logger.info('drop name')
 
         def calculate_age(age_date):
             """
@@ -121,6 +131,7 @@ with DAG(
             age_date : str
                 date of birth
             """
+            logger.info(f"Calculating age from date of birth")
             nac = datetime.strptime(age_date, '%d/%b/%y').date()
             if nac > datetime.today().date():
                 nac2 = nac.strftime(f'{nac.year-100}-%m-%d')
@@ -139,8 +150,9 @@ with DAG(
         path_txt = os.path.abspath(
             os.path.join(base_path, 'include', university)
             )
-
+        logger.info(f"Saving {university}")
         df.to_csv(path_txt, sep=',', index=False)
+        logger.info(f"Saved {university}")
 
     # PythonOperator to get the data from the database and
     #  save it in a csv file in the include/tmp folder of the project.

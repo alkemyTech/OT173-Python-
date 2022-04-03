@@ -7,7 +7,6 @@ from time import strftime
 import boto3
 import pandas as pd
 from airflow import DAG
-from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from botocore.exceptions import ClientError
 from decouple import config
@@ -182,7 +181,7 @@ def processing_villa_maria():
 
 
 # This function is for upload the file flores.txt to S3 bucket
-def S3_flores():
+def s3_flores():
     bucket_name = config('AWS_BUCKET_NAME')
     s3 = boto3.client('s3',
                       aws_access_key_id=config('AWS_PUBLIC_KEY'),
@@ -197,7 +196,7 @@ def S3_flores():
 
 
 # This function is for upload the file villa_maria.txt to S3 bucket
-def S3_villa_maria():
+def s3_villa_maria():
     bucket_name = config('AWS_BUCKET_NAME')
     s3 = boto3.client('s3',
                       aws_access_key_id=config('AWS_PUBLIC_KEY'),
@@ -246,12 +245,12 @@ with DAG(
     )  # PythonOperator to process data with Pandas
     tarea_5 = PythonOperator(
         task_id='Charging_S3_Flores',
-        python_callable=S3_flores,
+        python_callable=s3_flores,
         dag=dag
     )  # Charge the data of Flores with S3Operator
     tarea_6 = PythonOperator(
         task_id='Charging_S3_Villa_Maria',
-        python_callable=S3_villa_maria,
+        python_callable=s3_villa_maria,
         dag=dag
     )  # Charge the data of Villa Maria with S3Operator
 

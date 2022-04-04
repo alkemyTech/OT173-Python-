@@ -119,7 +119,7 @@ def data_process(**kwargs):
                     'jr. ': '',
                     'dvm ': '',
                     'phd ': ''
-                }
+                    }
 
     def age(birth_date):
         ''' Calculate age with the birth date '''

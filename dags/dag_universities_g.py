@@ -1,8 +1,7 @@
 import logging
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from time import strftime
-from turtle import left, right
 
 import pandas as pd
 from airflow import DAG
@@ -28,6 +27,7 @@ default_args = {
 
 # Directories
 root_dir = Path(__file__).resolve().parent.parent
+
 
 def connect_db():
     """ Connect to DataBase """
@@ -95,7 +95,7 @@ def data_process(**kwargs):
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
     df_cp['postal_code'] = df_cp['postal_code'].astype(str)
 
-    txt_path = Path(f"{root_dir}/txt").mkdir(parents=True, exist_ok=True) # create txt directory
+    txt_path = Path(f"{root_dir}/txt").mkdir(parents=True, exist_ok=True)  # create txt directory
 
     sort_columns = [
                 'university',
@@ -148,22 +148,23 @@ def data_process(**kwargs):
         df_sociales[column] = df_sociales[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
     
     # Split name in "first_name" & "last_name"
-    for abreviation, blank in delete_abreviations.items(): # delete abreviations in name column
+    for abreviation, blank in delete_abreviations.items():  # delete abreviations in name column
         df_sociales['name'] = df_sociales['name'].apply(lambda x: x.replace(abreviation, blank)) 
 
-    new = df_sociales['name'].str.split(' ', n=1, expand=True) # new data frame with split value columns
-    df_sociales['first_name'] = new[0] # making separate first_name
-    df_sociales["last_name"]= new[1] # making separate last_name column from new data frame
-    df_sociales.drop(columns=['name'], inplace=True) # Dropping old Name columns
+    new = df_sociales['name'].str.split(' ', n=1, expand=True)  # new data frame with split value columns
+    df_sociales['first_name'] = new[0]  # making separate first_name
+    df_sociales["last_name"]= new[1]  # making separate last_name column from new data frame
+    df_sociales.drop(columns=['name'], inplace=True)  # Dropping old Name columns
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
     for column in df_sociales[['inscription_date', 'age']]:
         df_sociales[column] = df_sociales[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
         
-    df_sociales['age'] = df_sociales['age'].apply(age) # age: int
+    df_sociales['age'] = df_sociales['age'].apply(age)  # age: int
     
     # gender: str choice(male, female)
-    df_sociales['gender'] = df_sociales['gender'].apply(lambda x: x.replace('M', 'male').replace('F', 'female')).astype('category')
+    df_sociales['gender'] = df_sociales['gender'].apply(lambda x: x.replace('M', 'male').
+                                                                    replace('F', 'female')).astype('category')
 
     # postal_code: str
     df_sociales['postal_code']= df_sociales['postal_code'].astype(str)
@@ -172,27 +173,27 @@ def data_process(**kwargs):
     df_sociales = df_sociales[sort_columns]
 
     # Save data
-    sociales_csv = df_sociales.to_csv(f"{root_dir}/csv/new_sociales.csv", index=False, encoding='utf-8')
-    sociales_txt = df_sociales.to_csv(f"{root_dir}/txt/sociales.txt", index=False, encoding='utf-8')
+    df_sociales.to_csv(f"{root_dir}/csv/new_sociales.csv", index=False, encoding='utf-8')
+    df_sociales.to_csv(f"{root_dir}/txt/sociales.txt", index=False, encoding='utf-8')
 
     # >>>> UNIVERSIDAD J. F. KENNEDY <<<<
     for column in df_kenedy[['university', 'career', 'name', 'email']]:
         df_kenedy[column] = df_kenedy[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
 
     # Split name in "first_name" & "last_name"
-    for abreviation, blank in delete_abreviations.items(): # delete abreviations in name column
+    for abreviation, blank in delete_abreviations.items():  # delete abreviations in name column
         df_kenedy['name'] = df_kenedy['name'].apply(lambda x: x.replace(abreviation, blank)) 
     
-    new = df_kenedy['name'].str.split(' ', n=1, expand=True) # new data frame with split value columns
-    df_kenedy['first_name'] = new[0] # making separate first_name
-    df_kenedy["last_name"]= new[1] # making separate last_name column from new data frame
-    df_kenedy.drop(columns=['name'], inplace=True) # Dropping old Name columns
+    new = df_kenedy['name'].str.split(' ', n=1, expand=True)  # new data frame with split value columns
+    df_kenedy['first_name'] = new[0]  # making separate first_name
+    df_kenedy["last_name"]= new[1]  # making separate last_name column from new data frame
+    df_kenedy.drop(columns=['name'], inplace=True)  # Dropping old Name columns
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
     for column in df_kenedy[['inscription_date', 'age']]:
         df_kenedy[column] = df_kenedy[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%y-%b-%d'), '%Y-%m-%d'))
 
-    df_kenedy['age'] = df_kenedy['age'].apply(age) # age: int
+    df_kenedy['age'] = df_kenedy['age'].apply(age)
 
     # gender: str choice(male, female)
     df_kenedy['gender'] = df_kenedy['gender'].apply(lambda x: x.replace('m', 'male').replace('f', 'female')).astype('category')
@@ -200,17 +201,14 @@ def data_process(**kwargs):
     # postal_code: str & merge data
     df_kenedy['postal_code']= df_kenedy['postal_code'].astype(str)
 
-    df_kenedy = df_kenedy.merge(df_cp, how='left', on='postal_code') # merge 'postal_code'
+    df_kenedy = df_kenedy.merge(df_cp, how='left', on='postal_code')
 
     # Sort columns
     df_kenedy = df_kenedy[sort_columns]
 
     # Save data
-    kenedy_csv = df_kenedy.to_csv(f"{root_dir}/csv/new_kenedy.csv", index=False, encoding='utf-8')
-    kenedy_txt = df_kenedy.to_csv(f"{root_dir}/txt/kenedy.txt", index=False, encoding='utf-8')
-
-    # logger.info(f"DataFrame Sociales: \n\n{df_sociales}\n")
-    # logger.info(f'DataFrame Kenedy: \n\n{df_kenedy}\n')
+    df_kenedy.to_csv(f"{root_dir}/csv/new_kenedy.csv", index=False, encoding='utf-8')
+    df_kenedy.to_csv(f"{root_dir}/txt/kenedy.txt", index=False, encoding='utf-8')
 
     logger.info('Data was processed!')
 

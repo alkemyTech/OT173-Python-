@@ -97,6 +97,19 @@ def data_process(**kwargs):
 
     txt_path = Path(f"{root_dir}/txt").mkdir(parents=True, exist_ok=True) # create txt directory
 
+    sort_columns = [
+                'university',
+                'career',
+                'inscription_date',
+                'first_name',
+                'last_name',
+                'gender',
+                'age',
+                'postal_code',
+                'location',
+                'email'
+                ]
+
     delete_abreviations = {
                     'mr. ': '',
                     'dr. ': '',
@@ -155,6 +168,9 @@ def data_process(**kwargs):
     # postal_code: str
     df_sociales['postal_code']= df_sociales['postal_code'].astype(str)
 
+    # Sort columns
+    df_sociales = df_sociales[sort_columns]
+
     # Save data
     sociales_csv = df_sociales.to_csv(f"{root_dir}/csv/new_sociales.csv", index=False, encoding='utf-8')
     sociales_txt = df_sociales.to_csv(f"{root_dir}/txt/sociales.txt", index=False, encoding='utf-8')
@@ -181,12 +197,13 @@ def data_process(**kwargs):
     # gender: str choice(male, female)
     df_kenedy['gender'] = df_kenedy['gender'].apply(lambda x: x.replace('m', 'male').replace('f', 'female')).astype('category')
 
-    # postal_code: str
+    # postal_code: str & merge data
     df_kenedy['postal_code']= df_kenedy['postal_code'].astype(str)
 
-    logger.info(f"DataFrame Kennedy: \n\n{df_kenedy.dtypes}\n")
+    df_kenedy = df_kenedy.merge(df_cp, how='left', on='postal_code') # merge 'postal_code'
 
-    df_kenedy = df_kenedy.merge(df_cp, how=left, on='postal_code') # merge 'postal_code'
+    # Sort columns
+    df_kenedy = df_kenedy[sort_columns]
 
     # Save data
     kenedy_csv = df_kenedy.to_csv(f"{root_dir}/csv/new_kenedy.csv", index=False, encoding='utf-8')

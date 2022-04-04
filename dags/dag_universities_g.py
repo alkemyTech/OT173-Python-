@@ -1,7 +1,8 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from pathlib import Path
 from time import strftime
+from turtle import left, right
 
 import pandas as pd
 from airflow import DAG
@@ -25,9 +26,11 @@ default_args = {
     'retry_delay': timedelta(minutes=5),  # Wait 5 minutes to try to run the script again
 }
 
+# Directories
+root_dir = Path(__file__).resolve().parent.parent
 
 def connect_db():
-    """ Connect to db """
+    """ Connect to DataBase """
 
     try:
         db_database = config('DB_DATABASE')
@@ -50,10 +53,10 @@ def connect_db():
 def get_data(**kwargs):
     """ Get data from SQL and convert to CSV """
 
-    # connect_db()
+    # call function
     connection = connect_db()
 
-    root_dir = Path(__file__).resolve().parent.parent
+    # root_dir = Path(__file__).resolve().parent.parent
     file_path = Path(f'{root_dir}/sql/{kwargs["sql_file"]}')
 
     with open(file_path) as f:
@@ -64,8 +67,7 @@ def get_data(**kwargs):
         df = pd.DataFrame(result.fetchall())
         df.columns = result.keys()
         csv_path = Path(f"{root_dir}/csv").mkdir(parents=True, exist_ok=True)
-        csv_path = str(csv_path)
-        file_csv = df.to_csv(f"{root_dir}/csv/{kwargs['file_name']}")
+        file_csv = df.to_csv(f"{root_dir}/csv/{kwargs['file_name']}", index=False, encoding='utf-8')
 
     logger.info('Getting data')
 
@@ -73,10 +75,127 @@ def get_data(**kwargs):
     return file_csv
 
 
-def data_process():
-    """ Process data in a DataFrame """
+def data_process(**kwargs):
+    """ Process data from 'kenedy.csv' and 'sociales.csv' files in 'df'   
+        
+        and create a '.txt' file
 
-    logger.info('Processing data')
+        Args:
+            kenedy.csv
+            sociales.csv
+    """
+
+    # Read files.csv
+    df_sociales = pd.read_csv(f"{root_dir}/csv/{kwargs['sociales']}", encoding='utf-8')
+    df_kenedy = pd.read_csv(f"{root_dir}/csv/{kwargs['kenedy']}", encoding='utf-8')
+
+    # Read "codigos_postales.csv" to merge with df_kenedy
+    df_cp = pd.read_csv(f"{root_dir}/csv/codigos_postales.csv", encoding='utf-8')
+    df_cp.rename(columns={'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace = True)
+    df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
+    df_cp['postal_code'] = df_cp['postal_code'].astype(str)
+
+    txt_path = Path(f"{root_dir}/txt").mkdir(parents=True, exist_ok=True) # create txt directory
+
+    delete_abreviations = {
+                    'mr. ': '',
+                    'dr. ': '',
+                    'mrs. ': '',
+                    'ms. ': '',
+                    'md ': '',
+                    'dds ': '',
+                    'jr. ': '',
+                    'dvm ': '',
+                    'phd ': ''
+                }
+
+    def age(birth_date):
+        ''' Calculate age with the birth date '''
+
+        birth_date = datetime.strptime(birth_date, '%Y-%m-%d').date()
+        today = date.today()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if (age <= 0): age += 100
+
+        return age
+
+
+    # TRANFORM DATA
+    #  
+    # university: str minúsculas, sin espacios extras, ni guiones
+    # career: str minúsculas, sin espacios extras, ni guiones
+    # name: str minúscula y sin espacios, ni guiones
+    # last_name: str minúscula y sin espacios, ni guiones
+    # location: str minúscula sin espacios extras, ni guiones
+    # email: str minúsculas, sin espacios extras, ni guiones
+
+    # >>>> FACULTAD LAT. DE CIENCIAS SOCIALES <<<<
+    for column in df_sociales[['university', 'career', 'name', 'location', 'email']]:
+        df_sociales[column] = df_sociales[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
+    
+    # Split name in "first_name" & "last_name"
+    for abreviation, blank in delete_abreviations.items(): # delete abreviations in name column
+        df_sociales['name'] = df_sociales['name'].apply(lambda x: x.replace(abreviation, blank)) 
+
+    new = df_sociales['name'].str.split(' ', n=1, expand=True) # new data frame with split value columns
+    df_sociales['first_name'] = new[0] # making separate first_name
+    df_sociales["last_name"]= new[1] # making separate last_name column from new data frame
+    df_sociales.drop(columns=['name'], inplace=True) # Dropping old Name columns
+
+    # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
+    for column in df_sociales[['inscription_date', 'age']]:
+        df_sociales[column] = df_sociales[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
+        
+    df_sociales['age'] = df_sociales['age'].apply(age) # age: int
+    
+    # gender: str choice(male, female)
+    df_sociales['gender'] = df_sociales['gender'].apply(lambda x: x.replace('M', 'male').replace('F', 'female')).astype('category')
+
+    # postal_code: str
+    df_sociales['postal_code']= df_sociales['postal_code'].astype(str)
+
+    # Save data
+    sociales_csv = df_sociales.to_csv(f"{root_dir}/csv/new_sociales.csv", index=False, encoding='utf-8')
+    sociales_txt = df_sociales.to_csv(f"{root_dir}/txt/sociales.txt", index=False, encoding='utf-8')
+
+    # >>>> UNIVERSIDAD J. F. KENNEDY <<<<
+    for column in df_kenedy[['university', 'career', 'name', 'email']]:
+        df_kenedy[column] = df_kenedy[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
+
+    # Split name in "first_name" & "last_name"
+    for abreviation, blank in delete_abreviations.items(): # delete abreviations in name column
+        df_kenedy['name'] = df_kenedy['name'].apply(lambda x: x.replace(abreviation, blank)) 
+    
+    new = df_kenedy['name'].str.split(' ', n=1, expand=True) # new data frame with split value columns
+    df_kenedy['first_name'] = new[0] # making separate first_name
+    df_kenedy["last_name"]= new[1] # making separate last_name column from new data frame
+    df_kenedy.drop(columns=['name'], inplace=True) # Dropping old Name columns
+
+    # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
+    for column in df_kenedy[['inscription_date', 'age']]:
+        df_kenedy[column] = df_kenedy[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%y-%b-%d'), '%Y-%m-%d'))
+
+    df_kenedy['age'] = df_kenedy['age'].apply(age) # age: int
+
+    # gender: str choice(male, female)
+    df_kenedy['gender'] = df_kenedy['gender'].apply(lambda x: x.replace('m', 'male').replace('f', 'female')).astype('category')
+
+    # postal_code: str
+    df_kenedy['postal_code']= df_kenedy['postal_code'].astype(str)
+
+    logger.info(f"DataFrame Kennedy: \n\n{df_kenedy.dtypes}\n")
+
+    df_kenedy = df_kenedy.merge(df_cp, how=left, on='postal_code') # merge 'postal_code'
+
+    # Save data
+    kenedy_csv = df_kenedy.to_csv(f"{root_dir}/csv/new_kenedy.csv", index=False, encoding='utf-8')
+    kenedy_txt = df_kenedy.to_csv(f"{root_dir}/txt/kenedy.txt", index=False, encoding='utf-8')
+
+    # logger.info(f"DataFrame Sociales: \n\n{df_sociales}\n")
+    # logger.info(f'DataFrame Kenedy: \n\n{df_kenedy}\n')
+
+    logger.info('Data was processed!')
 
 
 def save_data():
@@ -109,7 +228,14 @@ with DAG(
             'file_name': 'kenedy.csv'
         }
     )
-    dataprocess_task = PythonOperator(task_id='data_process', python_callable=data_process)
+    dataprocess_task = PythonOperator(
+        task_id='data_process',
+        python_callable=data_process,
+        op_kwargs={
+            'sociales': 'sociales.csv',
+            'kenedy': 'kenedy.csv'
+        }
+    )
     savedata_task = PythonOperator(task_id='save_data', python_callable=save_data)
 
     [getdata_sociales_task, getdata_kennedy_task] >> dataprocess_task >> savedata_task

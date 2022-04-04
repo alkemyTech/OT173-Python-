@@ -76,8 +76,7 @@ def get_data(**kwargs):
 
 
 def data_process(**kwargs):
-    """ Process data from 'kenedy.csv' and 'sociales.csv' files in 'df'   
-        
+    """ Process data from 'kenedy.csv' and 'sociales.csv' files in 'df'
         and create a '.txt' file
 
         Args:
@@ -91,7 +90,7 @@ def data_process(**kwargs):
 
     # Read "codigos_postales.csv" to merge with df_kenedy
     df_cp = pd.read_csv(f"{root_dir}/csv/codigos_postales.csv", encoding='utf-8')
-    df_cp.rename(columns={'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace = True)
+    df_cp.rename(columns = {'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace = True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
     df_cp['postal_code'] = df_cp['postal_code'].astype(str)
 
@@ -135,7 +134,7 @@ def data_process(**kwargs):
 
 
     # TRANFORM DATA
-    #  
+    #
     # university: str minúsculas, sin espacios extras, ni guiones
     # career: str minúsculas, sin espacios extras, ni guiones
     # name: str minúscula y sin espacios, ni guiones
@@ -146,7 +145,7 @@ def data_process(**kwargs):
     # >>>> FACULTAD LAT. DE CIENCIAS SOCIALES <<<<
     for column in df_sociales[['university', 'career', 'name', 'location', 'email']]:
         df_sociales[column] = df_sociales[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
-    
+
     # Split name in "first_name" & "last_name"
     for abreviation, blank in delete_abreviations.items():  # delete abreviations in name column
         df_sociales['name'] = df_sociales['name'].apply(lambda x: x.replace(abreviation, blank)) 
@@ -158,13 +157,14 @@ def data_process(**kwargs):
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
     for column in df_sociales[['inscription_date', 'age']]:
-        df_sociales[column] = df_sociales[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
+        df_sociales[column] = df_sociales[column].apply(lambda x: datetime.strftime(
+                                                                    datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
         
     df_sociales['age'] = df_sociales['age'].apply(age)  # age: int
-    
+
     # gender: str choice(male, female)
-    df_sociales['gender'] = df_sociales['gender'].apply(lambda x: x.replace('M', 'male').
-                                                                    replace('F', 'female')).astype('category')
+    df_sociales['gender'] = df_sociales['gender'].apply(lambda x: x.replace('M', 'male')
+                                                                    .replace('F', 'female')).astype('category')
 
     # postal_code: str
     df_sociales['postal_code']= df_sociales['postal_code'].astype(str)
@@ -186,7 +186,7 @@ def data_process(**kwargs):
     
     new = df_kenedy['name'].str.split(' ', n=1, expand=True)  # new data frame with split value columns
     df_kenedy['first_name'] = new[0]  # making separate first_name
-    df_kenedy["last_name"]= new[1]  # making separate last_name column from new data frame
+    df_kenedy["last_name"] = new[1]  # making separate last_name column from new data frame
     df_kenedy.drop(columns=['name'], inplace=True)  # Dropping old Name columns
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
@@ -196,10 +196,11 @@ def data_process(**kwargs):
     df_kenedy['age'] = df_kenedy['age'].apply(age)
 
     # gender: str choice(male, female)
-    df_kenedy['gender'] = df_kenedy['gender'].apply(lambda x: x.replace('m', 'male').replace('f', 'female')).astype('category')
+    df_kenedy['gender'] = df_kenedy['gender'].apply(lambda x: x.replace('m', 'male')
+                                                                .replace('f', 'female')).astype('category')
 
     # postal_code: str & merge data
-    df_kenedy['postal_code']= df_kenedy['postal_code'].astype(str)
+    df_kenedy['postal_code'] = df_kenedy['postal_code'].astype(str)
 
     df_kenedy = df_kenedy.merge(df_cp, how='left', on='postal_code')
 

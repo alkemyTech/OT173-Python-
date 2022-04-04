@@ -233,8 +233,9 @@ def upload_file(file_name, object_name=None):
         object_name = os.path.basename(file_name)
 
     # Upload the file
-    s3_client = boto3.client('s3', aws_access_key_id=config('AWS_PUBLIC_KEY'),
-                                   aws_secret_access_key=config('AWS_SECRET_KEY'))
+    s3_client = boto3.client('s3', 
+                             aws_access_key_id=config('AWS_PUBLIC_KEY'),
+                             aws_secret_access_key=config('AWS_SECRET_KEY'))
 
     with open(f"{root_dir}/txt/{file_name}", 'rb') as f:
         try:
@@ -242,7 +243,7 @@ def upload_file(file_name, object_name=None):
         except ClientError as e:
             logging.error(e)
             return False
-    
+
     logger.info('Uploading files.')
 
     return True

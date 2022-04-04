@@ -90,7 +90,7 @@ def data_process(**kwargs):
 
     # Read "codigos_postales.csv" to merge with df_kenedy
     df_cp = pd.read_csv(f"{root_dir}/csv/codigos_postales.csv", encoding='utf-8')
-    df_cp.rename(columns = {'codigo_postal':'postal_code', 'localidad':'location'}, inplace=True)
+    df_cp.rename(columns = {'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace = True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
     df_cp['postal_code'] = df_cp['postal_code'].astype(str)
 
@@ -128,11 +128,10 @@ def data_process(**kwargs):
         today = date.today()
         age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-        if age <= 0: 
+        if age <= 0:
             age += 100
 
         return age
-
 
     # TRANFORM DATA
     # university: str minúsculas, sin espacios extras, ni guiones

@@ -109,6 +109,9 @@ ENV/
 env.bak/
 venv.bak/
 !template.env
+files/
+include/
+txt/
 
 # Spyder project settings
 .spyderproject

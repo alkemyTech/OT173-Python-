@@ -90,7 +90,7 @@ def data_process(**kwargs):
 
     # Read "codigos_postales.csv" to merge with df_kenedy
     df_cp = pd.read_csv(f"{root_dir}/csv/codigos_postales.csv", encoding='utf-8')
-    df_cp.rename(columns = {'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace = True)
+    df_cp.rename(columns={'codigo_postal': 'postal_code', 'localidad': 'location'}, inplace=True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
     df_cp['postal_code'] = df_cp['postal_code'].astype(str)
 
@@ -152,14 +152,14 @@ def data_process(**kwargs):
 
     new = df_sociales['name'].str.split(' ', n=1, expand=True)  # new data frame with split value columns
     df_sociales['first_name'] = new[0]  # making separate first_name
-    df_sociales["last_name"]= new[1]  # making separate last_name column from new data frame
+    df_sociales["last_name"] = new[1]  # making separate last_name column from new data frame
     df_sociales.drop(columns=['name'], inplace=True)  # Dropping old Name columns
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
     for column in df_sociales[['inscription_date', 'age']]:
         df_sociales[column] = df_sociales[column].apply(lambda x: datetime.strftime(
                                                                   datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
-    
+
     df_sociales['age'] = df_sociales['age'].apply(age)  # age: int
 
     # gender: str choice(male, female)
@@ -167,7 +167,7 @@ def data_process(**kwargs):
                                                                    .replace('F', 'female')).astype('category')
 
     # postal_code: str
-    df_sociales['postal_code']= df_sociales['postal_code'].astype(str)
+    df_sociales['postal_code'] = df_sociales['postal_code'].astype(str)
 
     # Sort columns
     df_sociales = df_sociales[sort_columns]
@@ -182,8 +182,8 @@ def data_process(**kwargs):
 
     # Split name in "first_name" & "last_name"
     for abreviation, blank in delete_abreviations.items():  # delete abreviations in name column
-        df_kenedy['name'] = df_kenedy['name'].apply(lambda x: x.replace(abreviation, blank)) 
-    
+        df_kenedy['name'] = df_kenedy['name'].apply(lambda x: x.replace(abreviation, blank))
+
     new = df_kenedy['name'].str.split(' ', n=1, expand=True)  # new data frame with split value columns
     df_kenedy['first_name'] = new[0]  # making separate first_name
     df_kenedy["last_name"] = new[1]  # making separate last_name column from new data frame
@@ -191,7 +191,8 @@ def data_process(**kwargs):
 
     # inscription_date: str %Y-%m-%d format / age: %Y-%m-%d format
     for column in df_kenedy[['inscription_date', 'age']]:
-        df_kenedy[column] = df_kenedy[column].apply(lambda x: datetime.strftime(datetime.strptime(x, '%y-%b-%d'), '%Y-%m-%d'))
+        df_kenedy[column] = df_kenedy[column].apply(lambda x: datetime.strftime(
+                                                              datetime.strptime(x, '%y-%b-%d'), '%Y-%m-%d'))
 
     df_kenedy['age'] = df_kenedy['age'].apply(age)
 

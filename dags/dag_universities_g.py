@@ -1,11 +1,14 @@
 import logging
+import os
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from time import strftime
 
+import boto3
 import pandas as pd
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from botocore.exceptions import ClientError
 from decouple import config
 from sqlalchemy import create_engine, text
 
@@ -215,10 +218,34 @@ def data_process(**kwargs):
     logger.info('Data was processed!')
 
 
-def save_data():
-    """ Save data in S3 """
+def upload_file(file_name, object_name=None):
+    """ Upload a file to an S3 bucket
 
-    logger.info('Saving data in S3')
+    :param file_name: File to upload
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+
+    aws_bucket_name = config('AWS_BUCKET_NAME')
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = os.path.basename(file_name)
+
+    # Upload the file
+    s3_client = boto3.client('s3', aws_access_key_id=config('AWS_PUBLIC_KEY'),
+                                   aws_secret_access_key=config('AWS_SECRET_KEY'))
+
+    with open(f"{root_dir}/txt/{file_name}", 'rb') as f:
+        try:
+            s3_client.upload_fileobj(f, aws_bucket_name, object_name)
+        except ClientError as e:
+            logging.error(e)
+            return False
+    
+    logger.info('Uploading files.')
+
+    return True
 
 
 with DAG(
@@ -253,6 +280,19 @@ with DAG(
             'kenedy': 'kenedy.csv'
         }
     )
-    savedata_task = PythonOperator(task_id='save_data', python_callable=save_data)
+    upload_task_1 = PythonOperator(
+        task_id='upload_sociales',
+        python_callable=upload_file,
+        op_kwargs={
+            'file_name': 'sociales.txt'
+        }
+    )
+    upload_task_2 = PythonOperator(
+        task_id='upload_kenedy',
+        python_callable=upload_file,
+        op_kwargs={
+            'file_name': 'kenedy.txt'
+        }
+    )
 
-    [getdata_sociales_task, getdata_kennedy_task] >> dataprocess_task >> savedata_task
+    [getdata_sociales_task, getdata_kennedy_task] >> dataprocess_task >> [upload_task_1, upload_task_2]

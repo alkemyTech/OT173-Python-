@@ -80,5 +80,5 @@ def upload_data_nacional(local_file, bucket, s3_file):
         return False
     except NoCredentialsError:
         print("Credentials not available")
-        
+
         return False

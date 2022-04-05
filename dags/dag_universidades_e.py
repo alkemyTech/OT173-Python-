@@ -1,8 +1,8 @@
 import logging
-from datetime import date, datetime, timedelta
-import pandas as pd
 import os
+from datetime import date, datetime, timedelta
 
+import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 
@@ -101,11 +101,8 @@ def processing_data_inter():
         df = df.str.strip()
         return df
 
-    df_complete[[
-        'university', 'career', 'first_name', 
-        'last_name', 'email']] = df_complete[[
-        'university', 'career', 'first_name', 
-        'last_name', 'email']].apply(clean_data)
+    df_complete[['university', 'career', 'first_name', 'last_name', 'email']] = df_complete[[
+        'university', 'career', 'first_name', 'last_name', 'email']].apply(clean_data)
 
     # inscription_date: str %Y-%m-%d format
     df_complete['inscription_date'] = pd.to_datetime(
@@ -121,21 +118,22 @@ def processing_data_inter():
     def parse_date(date_str):
         '''
         Read correctly date format and fixed dates. 
-        Format receive: year two digits / 3 first letter of month / day number
-        Fixed dates example: wrong date 40 = 2040. correct date 40 = 1940
+        Format receive: year two digits / 3 first letter of month / day number.
+        Fixed dates example: wrong date 40 = 2040. correct date 40 = 1940.
         '''
+
         parsed = datetime.strptime(date_str, '%y/%b/%d')
         current_date = datetime.now()
         if parsed > current_date:
             parsed = parsed.replace(year=parsed.year - 100)
         return parsed
 
-    def get_age(DoB):
+    def get_age(dob):
         '''
-        Get age through Day of Birth(DoB)
+        Get age through Day of Birth(dob)
         '''
         today = date.today()
-        return today.year - DoB.year - ((today.month, today.day) < (DoB.month, DoB.day))
+        return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
     df_complete['date_fixed'] = df_complete['age'].apply(parse_date)
     df_complete['age'] = df_complete['date_fixed'].apply(get_age)
@@ -143,7 +141,7 @@ def processing_data_inter():
 
     # Sort columns
     df_complete = df_complete[[
-        'university', 'career', 'postal_code', 'location', 'inscription_date', 
+        'university', 'career', 'postal_code', 'location', 'inscription_date',
         'first_name', 'last_name',  'gender', 'age', 'email']]
 
     df_complete.to_csv(
@@ -153,8 +151,9 @@ def processing_data_inter():
 def processing_data_pampa():
     """
     Data normalization of University Nacional Pampa.
-    Saved data as universidad_nacional_pampa.txt
+    Saved data as universidad_nacional_pampa.txt.
     """
+
     folder_csv = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..', 'files'))
 
@@ -193,12 +192,8 @@ def processing_data_pampa():
         df = df.str.lower()
         return df
 
-    df_complete[[
-        'university', 'career', 'first_name', 
-        'last_name', 'location', 'email'
-        ]] = df_complete[[
-            'university', 'career', 'first_name', 
-            'last_name', 'location', 'email']].apply(clean_data)
+    df_complete[['university', 'career', 'first_name', 'last_name', 'location', 'email']] = df_complete[[
+        'university', 'career', 'first_name', 'last_name', 'location', 'email']].apply(clean_data)
 
     # inscription_date: str %Y-%m-%d format
     df_complete['inscription_date'] = pd.to_datetime(
@@ -222,20 +217,19 @@ def processing_data_pampa():
             parsed = parsed.replace(year=parsed.year - 100)
         return parsed
 
-    def get_age(DoB):
+    def get_age(dob):
         '''
-        Get age through Day of Birth(DoB)
+        Get age through Day of Birth(dob)
         '''
         today = date.today()
-        return today.year - DoB.year - ((today.month, today.day) < (DoB.month, DoB.day))
+        return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
     df_complete['date_fixed'] = df_complete['age'].apply(parse_date)
     df_complete['age'] = df_complete['date_fixed'].apply(get_age)
     df_complete.drop(columns=["date_fixed"], inplace=True)
 
-    df_complete = df_complete[[
-        'university', 'career', 'postal_code',  'location', 'inscription_date',
-        'first_name', 'last_name', 'gender', 'age', 'email']]
+    df_complete = df_complete[['university', 'career', 'postal_code',  'location',
+                               'inscription_date', 'first_name', 'last_name', 'gender', 'age', 'email']]
 
     df_complete.to_csv(
         folder_csv + "/universidad_nacional_pampa.txt", index=False, encoding='utf-8')

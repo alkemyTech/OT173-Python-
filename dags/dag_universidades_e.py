@@ -117,11 +117,10 @@ def processing_data_inter():
     # age: int
     def parse_date(date_str):
         '''
-        Read correctly date format and fixed dates. 
+        Read correctly date format and fixed dates.
         Format receive: year two digits / 3 first letter of month / day number.
         Fixed dates example: wrong date 40 = 2040. correct date 40 = 1940.
         '''
-
         parsed = datetime.strptime(date_str, '%y/%b/%d')
         current_date = datetime.now()
         if parsed > current_date:

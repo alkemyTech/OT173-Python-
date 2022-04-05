@@ -23,8 +23,12 @@ def extract_data(query_name, csv_name):
         query_name: name of file sql that is inside of the folder sql.
         csv_name: name of csv file that will store in a folder called csv.
     '''
-    engine = create_engine(config('DIALECT')+"://"+config('POSTGRESQL_USER')+":"+config('POSTGRESQL_PASSWORD')+"@" +
-                           config('POSTGRESQL_HOST')+"/"+config('POSTGRESQL_DB'))
+    engine = create_engine(
+        config('DIALECT')+"://"+
+        config('POSTGRESQL_USER')+":"+
+        config('POSTGRESQL_PASSWORD')+"@" +
+        config('POSTGRESQL_HOST')+"/"+
+        config('POSTGRESQL_DB'))
 
     path_sql = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..', 'sql', query_name))
@@ -79,11 +83,31 @@ with DAG(
             'query_name': 'query_interamericana.sql',
             'csv_name': 'interamericana.csv'})
 
-    # Transform data with Pandas
-    preprocessing_data = DummyOperator(task_id='preprocessing_data')
+     # Transform data with Pandas
+    tranform_inter = PythonOperator(
+        task_id='transform_data_interamericana',
+        python_callable=processing_data_inter)
 
-    # Load .txt to S3 server
-    upload_data = DummyOperator(task_id='upload_data')
+    transform_nacional = PythonOperator(
+        task_id='transform_data_nacionalpampa',
+        python_callable=processing_data_pampa)
 
-    extract_data_inter >> preprocessing_data >> upload_data,
-    extract_data_pampa >> preprocessing_data >> upload_data
+    # Upload data to AWS
+    upload_data_interamericana = PythonOperator(
+        task_id='upload_data_uni_interamericana',
+        python_callable=upload_data_inter,
+        op_kwargs={
+            'local_file': '/universidad_nacional_pampa.txt',
+            'bucket': config('AWS_BUCKET_NAME'),
+            's3_file': 's3_universidad_nacional_pampa.txt'})
+
+    upload_data_nacional_pampa = PythonOperator(
+        task_id='upload_data_uni_nacional_pampa',
+        python_callable=upload_data_nacional,
+        op_kwargs={
+            'local_file': '/universidad_interamericana.txt',
+            'bucket': config('AWS_BUCKET_NAME'),
+            's3_file': 's3_universidad_interamericana.txt'})
+
+    extract_data_inter >> tranform_inter >> upload_data_interamericana,
+    extract_data_pampa >> transform_nacional >> upload_data_nacional_pampa

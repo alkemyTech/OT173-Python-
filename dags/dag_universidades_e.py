@@ -208,10 +208,9 @@ def processing_data_pampa():
     # age: int
     def parse_date(date_str):
         '''
-        Read correctly date format and fixed dates. 
+        Read correctly date format and fixed dates.
         Format receive: day number / month number 01-12 / year in 4 digits
         '''
-        
         parsed = datetime.strptime(date_str, '%d/%m/%Y')
         current_date = datetime.now()
         if parsed > current_date:

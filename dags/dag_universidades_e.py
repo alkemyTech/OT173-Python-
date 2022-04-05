@@ -1,8 +1,12 @@
 import logging
+import os
 from datetime import datetime, timedelta
 
+import boto3
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+from botocore.exceptions import NoCredentialsError
+from decouple import config
 
 logging.basicConfig(level=logging.INFO, datefmt=("%Y-%m-%d"),
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -37,3 +41,42 @@ with DAG(
 
     execute_query_inter >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data,
     execute_query_pampa >> convert_to_csv >> preprocessing_data >> convert_to_txt >> upload_data
+
+
+def upload_data_inter(local_file, bucket, s3_file):
+
+    s3 = boto3.client('s3', aws_access_key_id=config('AWS_PUBLIC_KEY'),
+                      aws_secret_access_key=config('AWS_SECRET_KEY'))
+
+    folder_csv = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), '..', 'files'))
+
+    try:
+        s3.upload_file(folder_csv + local_file, bucket, s3_file)
+        print("Upload Successful")
+        return True
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+
+def upload_data_nacional(local_file, bucket, s3_file):
+
+    s3 = boto3.client('s3', aws_access_key_id=config('AWS_PUBLIC_KEY'),
+                      aws_secret_access_key=config('AWS_SECRET_KEY'))
+
+    folder_csv = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), '..', 'files'))
+
+    try:
+        s3.upload_file(folder_csv + local_file, bucket, s3_file)
+        print("Upload Successful")
+        return True
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False

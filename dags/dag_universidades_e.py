@@ -62,6 +62,7 @@ def upload_data_inter(local_file, bucket, s3_file):
         print("Credentials not available")
         return False
 
+
 def upload_data_nacional(local_file, bucket, s3_file):
 
     s3 = boto3.client('s3', aws_access_key_id=config('AWS_PUBLIC_KEY'),
@@ -80,3 +81,4 @@ def upload_data_nacional(local_file, bucket, s3_file):
     except NoCredentialsError:
         print("Credentials not available")
         return False
+        

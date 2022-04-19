@@ -4,10 +4,11 @@ import logging.config
 import os
 import re
 import time
-import defusedxml.ElementTree as et
 from datetime import datetime
 from functools import reduce
 from typing import Counter
+
+import defusedxml.ElementTree as et
 
 logging.config.fileConfig('logging.cfg')
 

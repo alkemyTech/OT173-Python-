@@ -5,9 +5,9 @@ import os
 from functools import reduce
 from os import path
 import xml.etree.ElementTree as ETree
-from task_1 import chunkify, tags_and_ans, tags_acc_answ, count_tags, mapped_chunks_top10, reducer_top10
-from task_2 import chunkify, scores, reducer, mapper_words_score
-from task_3 import chunkify, dates_time, mapper_dates, sum_dates
+from task_1 import chunkify, mapped_chunks_top10, reducer_top10
+from task_2 import chunkify, mapper_words_score, reducer
+from task_3 import chunkify, mapper_dates, sum_dates
 
 """ In this tasks I had to use MapReduce for data´s Group A.
 The tasks are:
@@ -25,6 +25,7 @@ dir = os.path.dirname(__file__)
 file_path = f'{dir}/posts.xml'
 mytree = ETree.parse(file_path)
 myroot = mytree.getroot()
+
 
 # Task 1: Top 10 tags with more accepted answers
 def top_10_tags(root):
@@ -68,7 +69,7 @@ def average_answer_time(root):
 
 
 if __name__ == '__main__':
-   
-   top_10_tags(myroot)
-   relation_score_words(myroot)
-   average_answer_time(myroot)
+
+    top_10_tags(myroot)
+    relation_score_words(myroot)
+    average_answer_time(myroot)

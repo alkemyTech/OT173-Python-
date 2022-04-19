@@ -1,14 +1,12 @@
-import logging.config
-import re
 from collections import Counter
-from datetime import datetime
+
 
 def chunkify(iterable, len_chunk):
     for i in range(0, len(iterable), len_chunk):
         yield iterable[i:i + len_chunk]
 
 
-###Create a list with Tags and accepted answers
+# Create a list with Tags and accepted answers
 def tags_and_ans(data_chunk):
     tags = []
     acc_ans_id = []
@@ -19,7 +17,7 @@ def tags_and_ans(data_chunk):
     return tags, acc_ans_id
 
 
-#Create one list with Tags and accepted answers
+# Create one list with Tags and accepted answers
 def tags_acc_answ(data):
     tags_with_acc_ans = []
     data = zip(data[0], data[1])
@@ -29,7 +27,6 @@ def tags_acc_answ(data):
             tags_with_acc_ans.append(tags)
 
     return tags_with_acc_ans
-
 
 
 def count_tags(tags):
@@ -45,7 +42,7 @@ def count_tags(tags):
     return counter
 
 
-#Create a map that contains the tags with accepted answers for the different chucks
+# Create a map that contains the tags with accepted answers for the different chucks
 def mapped_chunks_top10(chunks):
     mapped = map(tags_and_ans, chunks)
     mapped = map(tags_acc_answ, mapped)
@@ -53,6 +50,6 @@ def mapped_chunks_top10(chunks):
     return mapped
 
 
-#Returns the accepted answers for Tags for Chuck
+# Returns the accepted answers for Tags for Chuck
 def reducer_top10(list_of_dict_1, list_of_dict_2):
     return list_of_dict_1 + list_of_dict_2

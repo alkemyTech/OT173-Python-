@@ -8,7 +8,7 @@ from datetime import datetime
 from functools import reduce
 from typing import Counter
 
-import defusedxml.ElementTree as et
+import defusedxml.ElementTree as ET
 
 logging.config.fileConfig('logging.cfg')
 
@@ -180,7 +180,7 @@ def answer_time(data):
 if __name__ == '__main__':
     # Read data
     start = time.time()
-    tree = et.parse(data_dir)
+    tree = ET.parse(data_dir)
     root = tree.getroot()
     len_chunk = 50
     data_chunks_1 = data_generator(root, len_chunk)

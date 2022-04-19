@@ -4,7 +4,7 @@ import logging.config
 import os
 import re
 import time
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as et
 from datetime import datetime
 from functools import reduce
 from typing import Counter
@@ -179,7 +179,7 @@ def answer_time(data):
 if __name__ == '__main__':
     # Read data
     start = time.time()
-    tree = ET.parse(data_dir)
+    tree = et.parse(data_dir)
     root = tree.getroot()
     len_chunk = 50
     data_chunks_1 = data_generator(root, len_chunk)
@@ -211,8 +211,10 @@ if __name__ == '__main__':
     mapped_questions = list(map(mapper_4, data_chunks_4))
     mapped_questions = list(filter(None, mapped_questions))
     mapped_questions = list(itertools.chain(*mapped_questions))
-    mapped_questions_answers_300 = list(map(questions_answers, map_scores_answers_300))
-    mapped_questions_answers_400 = list(map(questions_answers, map_scores_answers_400))
+    mapped_questions_answers_300 = list(
+        map(questions_answers, map_scores_answers_300))
+    mapped_questions_answers_400 = list(
+        map(questions_answers, map_scores_answers_400))
     time_response_300 = list(map(answer_time, mapped_questions_answers_300))
     time_response_400 = list(map(answer_time, mapped_questions_answers_400))
     avg_time_response_300 = reduce(
@@ -228,15 +230,16 @@ if __name__ == '__main__':
     logger.info('----Top 10 least viewed posts:')
     for post in top_10_post_least_viewed:
         logger.info(post)
-    logger.info('----Top 10 words most mentioned in posts by type of post (1: Question, 2: Answer, 3: ?):')
+    logger.info(
+        '----Top 10 words most mentioned in posts by type of post (1: Question, 2: Answer, 3: ?):')
     for type_post, count_words in top_10_post_most_freq_per_type_post.items():
         logger.info(type_post)
         for word in count_words:
             logger.info(f'  {word}')
     logger.info(
-    f'----Average response time from the ranking of the first 300 by score: {avg_time_response_300}')
+        f'----Average response time from the ranking of the first 300 by score: {avg_time_response_300}')
     logger.info(
-    f'----Average response time from the ranking of the first 400 by score: {avg_time_response_400}')
+        f'----Average response time from the ranking of the first 400 by score: {avg_time_response_400}')
     end = time.time()
 
     logger.info(f'----Execution time: {round(end - start, 2)}')

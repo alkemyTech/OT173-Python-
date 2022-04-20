@@ -4,10 +4,11 @@ import logging.handlers
 import os
 from functools import reduce
 from os import path
-import xml.etree.ElementTree as ETree
 from task_1 import chunkify, mapped_chunks_top10, reducer_top10
 from task_2 import chunkify, mapper_words_score, reducer
 from task_3 import chunkify, mapper_dates, sum_dates
+
+import defusedxml.ElementTree as ETree
 
 """ In this tasks I had to use MapReduce for data´s Group A.
 The tasks are:

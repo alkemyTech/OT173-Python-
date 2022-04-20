@@ -1,7 +1,5 @@
-import logging.config
 import re
 from collections import Counter
-from functools import reduce
 
 def chunkify(iterable, len_chunk):
     for i in range(0, len(iterable), len_chunk):

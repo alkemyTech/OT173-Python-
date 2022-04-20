@@ -4,11 +4,11 @@ import logging.handlers
 import os
 from functools import reduce
 from os import path
-from task_1 import chunkify, mapped_chunks_top10, reducer_top10
-from task_2 import chunkify, mapper_words_score, reducer
-from task_3 import chunkify, mapper_dates, sum_dates
 
 import defusedxml.ElementTree as ETree
+from task_1 import chunkify, mapped_chunks_top10, reducer_top10
+from task_2 import chunkify1, mapper_words_score, reducer
+from task_3 import chunkify2, mapper_dates, sum_dates
 
 """ In this tasks I had to use MapReduce for data´s Group A.
 The tasks are:
@@ -44,7 +44,7 @@ def top_10_tags(root):
 # Task 2: Average score in relation with the number of words
 def relation_score_words(root):
     # Load data in chunks of 100 dates
-    data_chunks_2 = chunkify(root, 100)
+    data_chunks_2 = chunkify1(root, 100)
     mapped_chunks_2 = list(map(mapper_words_score, data_chunks_2))
     mapped = list(filter(None, mapped_chunks_2))
     relationship = reducer(mapped)
@@ -58,7 +58,7 @@ def relation_score_words(root):
 # Task 3: Average time to answer a post
 def average_answer_time(root):
     # Load data in chunks of 100 dates
-    data_chunks_3 = chunkify(root, 100)
+    data_chunks_3 = chunkify2(root, 100)
     mapped_chunks_3 = list(map(mapper_dates, data_chunks_3))
     times = sum_dates(mapped_chunks_3)
     reduced = reduce(lambda count, l: count + len(l), mapped_chunks_3, 0)

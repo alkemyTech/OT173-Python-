@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def chunkify(iterable, len_chunk):
+def chunkify2(iterable, len_chunk):
     for i in range(0, len(iterable), len_chunk):
         yield iterable[i:i + len_chunk]
 

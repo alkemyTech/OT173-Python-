@@ -1,7 +1,8 @@
 import re
 from collections import Counter
 
-def chunkify(iterable, len_chunk):
+
+def chunkify1(iterable, len_chunk):
     for i in range(0, len(iterable), len_chunk):
         yield iterable[i:i + len_chunk]
 

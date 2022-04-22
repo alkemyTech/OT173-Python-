@@ -3,12 +3,12 @@ import os
 from datetime import datetime, timedelta
 
 import boto3
-from botocore.exceptions import ClientError
+import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
+from botocore.exceptions import ClientError
 from decouple import config
-import pandas as pd
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',

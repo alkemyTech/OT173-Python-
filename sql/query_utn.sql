@@ -2,7 +2,7 @@ SELECT
   university,
   career,
   inscription_date,
-  nombre as name
+  nombre as name,
   sexo as gender,
   birth_date as age,
   location,

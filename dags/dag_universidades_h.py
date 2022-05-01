@@ -3,19 +3,19 @@ import os
 from datetime import datetime, timedelta
 
 import boto3
-from botocore.exceptions import ClientError
+import pandas as pd
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
+from botocore.exceptions import ClientError
 from decouple import config
-import pandas as pd
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(message)s',
     datefmt='%Y-%m-%d',
     level=logging.INFO,
     filemode="a"
-    )
+)
 logger = logging.getLogger(__name__)
 
 default_args = {
@@ -45,53 +45,57 @@ def load_data(file_name, object_name=None):
 
     # Upload the file
     s3_client = boto3.client(
-                            's3',
-                            aws_access_key_id=config('AWS_PUBLIC_KEY'),
-                            aws_secret_access_key=config('AWS_SECRET_KEY')
-                        )
+        's3',
+        aws_access_key_id=config('AWS_PUBLIC_KEY'),
+        aws_secret_access_key=config('AWS_SECRET_KEY')
+    )
     try:
-        s3_client.upload_file(f'{parent_dir}/files/{file_name}', config('AWS_BUCKET_NAME'), object_name)
+        s3_client.upload_file(
+            f'{parent_dir}/files/{file_name}',
+            config('AWS_BUCKET_NAME'),
+            object_name)
     except ClientError as e:
         logging.error(e)
         return False
     return True
 
+
 # Global variables used in transform functions
 columns_types = {
-                'university': 'string',
-                'career': 'string',
-                'inscription_date': 'string',
-                'first_name': 'string',
-                'last_name': 'string',
-                'gender': 'category',
-                'age': 'int64',
-                'postal_code': 'string',
-                'location': 'string',
+    'university': 'string',
+    'career': 'string',
+    'inscription_date': 'string',
+    'first_name': 'string',
+    'last_name': 'string',
+    'gender': 'category',
+    'age': 'int64',
+    'postal_code': 'string',
+    'location': 'string',
                 'email': 'string'
-                }
+}
 delete_abreviations = {
-                    'mr.': '',
-                    'dr.': '',
-                    'mrs.': '',
-                    'ms.': '',
-                    'md': '',
-                    'dds': '',
-                    'jr.': '',
-                    'dvm': '',
-                    'phd': ''
-                }
+    'mr.': '',
+    'dr.': '',
+    'mrs.': '',
+    'ms.': '',
+    'md': '',
+    'dds': '',
+    'jr.': '',
+    'dvm': '',
+    'phd': ''
+}
 sort_columns = [
-                'university',
-                'career',
-                'inscription_date',
-                'first_name',
-                'last_name',
-                'gender',
-                'age',
-                'postal_code',
-                'location',
-                'email'
-                ]
+    'university',
+    'career',
+    'inscription_date',
+    'first_name',
+    'last_name',
+    'gender',
+    'age',
+    'postal_code',
+    'location',
+    'email'
+]
 
 
 def calculate_age(born, born_datefmt):
@@ -103,7 +107,8 @@ def calculate_age(born, born_datefmt):
     """
     born = datetime.strptime(born, born_datefmt)
     today = datetime.today()
-    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    age = today.year - born.year - \
+        ((today.month, today.day) < (born.month, born.day))
     if age < 0:
         age += 100
     return age
@@ -126,8 +131,14 @@ def transform_cine_data(csv, txt, born_datefmt):
 
     # Read extracted data and postal code asset. Merge in unique dataset
     df_cine = pd.read_csv(f'{parent_dir}/files/{csv}', encoding='utf-8')
-    df_cp = pd.read_csv(f'{parent_dir}/files/codigos_postales.csv', encoding='utf-8')
-    df_cp.rename(columns={'localidad': 'location', 'codigo_postal': 'postal_code'}, inplace=True)
+    df_cp = pd.read_csv(
+        f'{parent_dir}/files/codigos_postales.csv',
+        encoding='utf-8')
+    df_cp.rename(
+        columns={
+            'localidad': 'location',
+            'codigo_postal': 'postal_code'},
+        inplace=True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
 
     # Transform data from Universidad del Cine
@@ -135,27 +146,30 @@ def transform_cine_data(csv, txt, born_datefmt):
     df_cine = df_cine.convert_dtypes()
     for column in df_cine.columns:
         if column in ['university', 'career', 'name', 'location']:
-            df_cine[column] = df_cine[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
+            df_cine[column] = df_cine[column].apply(
+                lambda x: x.lower().replace('-', ' ').strip(' '))
         elif column == 'email':
-            df_cine[column] = df_cine[column].apply(lambda x: x.lower().strip(' '))
+            df_cine[column] = df_cine[column].apply(
+                lambda x: x.lower().strip(' '))
         elif column == 'age':
-            df_cine['age'] = df_cine['age'].apply(lambda x: calculate_age(x, born_datefmt))
+            df_cine['age'] = df_cine['age'].apply(
+                lambda x: calculate_age(x, born_datefmt))
         elif column == 'gender':
-            df_cine['gender'] = df_cine['gender'].apply(lambda x: x.lower()
-                                                                   .replace('m', 'male')
-                                                                   .replace('f', 'female')
-                                                                   .strip(' '))
+            df_cine['gender'] = df_cine['gender'].apply(
+                lambda x: x.lower() .replace(
+                    'm', 'male') .replace(
+                    'f', 'female') .strip(' '))
         elif column == 'inscription_date':
-            df_cine['inscription_date'] = df_cine['inscription_date'].apply(lambda x: datetime.strftime(
-                                                                                      datetime.strptime(x, '%d-%m-%Y'),
-                                                                                      '%Y-%m-%d'))
+            df_cine['inscription_date'] = df_cine['inscription_date'].apply(
+                lambda x: datetime.strftime(datetime.strptime(x, '%d-%m-%Y'), '%Y-%m-%d'))
 
     # Merge postal codes to Universidad del Cine DataFrame
     df_cine = df_cine.merge(df_cp, on='location', how='left')
 
     # Delete abreviations in name column
     for abreviation, blank in delete_abreviations.items():
-        df_cine['name'] = df_cine['name'].apply(lambda x: x.replace(abreviation, blank))
+        df_cine['name'] = df_cine['name'].apply(
+            lambda x: x.replace(abreviation, blank))
 
     # Split name into first name and last name
     df_cine['name'] = df_cine['name'].apply(lambda x: x.strip(' '))
@@ -171,7 +185,11 @@ def transform_cine_data(csv, txt, born_datefmt):
     # Sorting columns
     df_cine = df_cine[sort_columns]
 
-    return df_cine.to_csv(f'{parent_dir}/files/{txt}', encoding='utf-8', index=False, sep='\t')
+    return df_cine.to_csv(
+        f'{parent_dir}/files/{txt}',
+        encoding='utf-8',
+        index=False,
+        sep='\t')
 
 
 def transform_uba_data(csv, txt, born_datefmt):
@@ -191,8 +209,14 @@ def transform_uba_data(csv, txt, born_datefmt):
 
     # Read extracted data and postal code asset. Merge in unique dataset
     df_uba = pd.read_csv(f'{parent_dir}/files/{csv}', encoding='utf-8')
-    df_cp = pd.read_csv(f'{parent_dir}/files/codigos_postales.csv', encoding='utf-8')
-    df_cp.rename(columns={'localidad': 'location', 'codigo_postal': 'postal_code'}, inplace=True)
+    df_cp = pd.read_csv(
+        f'{parent_dir}/files/codigos_postales.csv',
+        encoding='utf-8')
+    df_cp.rename(
+        columns={
+            'localidad': 'location',
+            'codigo_postal': 'postal_code'},
+        inplace=True)
     df_cp['location'] = df_cp['location'].apply(lambda x: x.lower().strip(' '))
 
     # Transform data from Universidad de Buenos Aires
@@ -200,26 +224,30 @@ def transform_uba_data(csv, txt, born_datefmt):
     df_uba = df_uba.convert_dtypes()
     for column in df_uba.columns:
         if column in ['university', 'career', 'name', 'location']:
-            df_uba[column] = df_uba[column].apply(lambda x: x.lower().replace('-', ' ').strip(' '))
+            df_uba[column] = df_uba[column].apply(
+                lambda x: x.lower().replace('-', ' ').strip(' '))
         elif column == 'email':
-            df_uba[column] = df_uba[column].apply(lambda x: x.lower().strip(' '))
+            df_uba[column] = df_uba[column].apply(
+                lambda x: x.lower().strip(' '))
         elif column == 'age':
-            df_uba['age'] = df_uba['age'].apply(lambda x: calculate_age(x, born_datefmt))
+            df_uba['age'] = df_uba['age'].apply(
+                lambda x: calculate_age(x, born_datefmt))
         elif column == 'gender':
-            df_uba['gender'] = df_uba['gender'].apply(lambda x: x.replace('m', 'male')
-                                                                 .replace('f', 'female')
-                                                                 .strip(' '))
+            df_uba['gender'] = df_uba['gender'].apply(
+                lambda x: x.replace(
+                    'm', 'male') .replace(
+                    'f', 'female') .strip(' '))
         elif column == 'inscription_date':
-            df_uba['inscription_date'] = df_uba['inscription_date'].apply(lambda x: datetime.strftime(
-                                                                                    datetime.strptime(x, '%d-%b-%y'),
-                                                                                    '%Y-%m-%d'))
+            df_uba['inscription_date'] = df_uba['inscription_date'].apply(
+                lambda x: datetime.strftime(datetime.strptime(x, '%d-%b-%y'), '%Y-%m-%d'))
 
     # Merge postal codes to Universidad de Buenos Aires DataFrame
     df_uba = df_uba.merge(df_cp, on='postal_code', how='left')
 
     # Delete abreviations in name column
     for abreviation, blank in delete_abreviations.items():
-        df_uba['name'] = df_uba['name'].apply(lambda x: x.replace(abreviation, blank))
+        df_uba['name'] = df_uba['name'].apply(
+            lambda x: x.replace(abreviation, blank))
 
     # Split name into first name and last name
     df_uba['name'] = df_uba['name'].apply(lambda x: x.strip(' '))
@@ -235,7 +263,11 @@ def transform_uba_data(csv, txt, born_datefmt):
     # Sorting columns
     df_uba = df_uba[sort_columns]
 
-    return df_uba.to_csv(f'{parent_dir}/files/{txt}', encoding='utf-8', index=False, sep='\t')
+    return df_uba.to_csv(
+        f'{parent_dir}/files/{txt}',
+        encoding='utf-8',
+        index=False,
+        sep='\t')
 
 
 with DAG(
@@ -251,38 +283,39 @@ with DAG(
 
     # Transform data with Pandas - Python operator
     transform_uba = PythonOperator(
-                    task_id='transform_uba',
-                    python_callable=transform_uba_data,
-                    op_kwargs={
-                        'csv': 'extract_uba.csv',
-                        'txt': 'transform_uba.txt',
-                        'born_datefmt': '%y-%b-%d'
-                        }
-                    )
+        task_id='transform_uba',
+        python_callable=transform_uba_data,
+        op_kwargs={
+            'csv': 'extract_uba.csv',
+            'txt': 'transform_uba.txt',
+            'born_datefmt': '%y-%b-%d'
+        }
+    )
     transform_cine = PythonOperator(
-                    task_id='transform_cine',
-                    python_callable=transform_cine_data,
-                    op_kwargs={
-                        'csv': 'extract_cine.csv',
-                        'txt': 'transform_cine.txt',
-                        'born_datefmt': '%d-%m-%Y'
-                        }
-                    )
+        task_id='transform_cine',
+        python_callable=transform_cine_data,
+        op_kwargs={
+            'csv': 'extract_cine.csv',
+            'txt': 'transform_cine.txt',
+            'born_datefmt': '%d-%m-%Y'
+        }
+    )
 
     # Load data to S3 - S3 operator
     load_uba = PythonOperator(
-                    task_id='load_uba',
-                    python_callable=load_data,
-                    op_kwargs={
-                        'file_name': 'transform_uba.txt'
-                        }
-                    )
+        task_id='load_uba',
+        python_callable=load_data,
+        op_kwargs={
+            'file_name': 'transform_uba.txt'
+        }
+    )
     load_cine = PythonOperator(
-                    task_id='load_cine',
-                    python_callable=load_data,
-                    op_kwargs={
-                        'file_name': 'transform_cine.txt'
-                        }
-                    )
+        task_id='load_cine',
+        python_callable=load_data,
+        op_kwargs={
+            'file_name': 'transform_cine.txt'
+        }
+    )
 
-    [extract_uba >> transform_uba >> load_uba, extract_cine >> transform_cine >> load_cine]
+    [extract_uba >> transform_uba >> load_uba,
+     extract_cine >> transform_cine >> load_cine]

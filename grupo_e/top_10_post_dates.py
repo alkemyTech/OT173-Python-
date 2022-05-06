@@ -8,7 +8,7 @@ from functools import reduce
 from operator import add
 from os import path
 
-from defusedxml.ElementTree import ET
+from defusedxml.ElementTree import Et
 
 
 def chunkify(iterable, number_of_chunks):
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     Top 10 dates with the highest number of posts created.
     Requirements:
         - CreationDate.
-        - PostTypeId 
-    Details: 
+        - PostTypeId
+    Details:
         - Date format received: e.g. 2009-06-28T07:14:29.363
         - Date format python: %Y-%m-%dT%H:%M:%S.%f
     '''
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     parent_path = path.join(path.dirname(path.abspath(__file__)))
 
     # XML post file
-    tree = ET.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
+    tree = Et.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
 
     # Getting the parent tag of the xml document
     root = tree.getroot()

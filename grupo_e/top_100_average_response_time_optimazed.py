@@ -8,7 +8,7 @@ from datetime import datetime
 from functools import reduce
 from os import path
 
-from defusedxml.ElementTree import ET
+from defusedxml.ElementTree import Et
 
 
 def chunkify(iterable, number_of_chunks):
@@ -30,7 +30,7 @@ def get_post_question(data):
             return {'id_post': id_post_xml,
                     'score': score_xml,
                     'creation_date_question': creation_date_xml}
-    except:
+    except KeyboardInterrupt:
         return None
 
 
@@ -45,7 +45,7 @@ def get_post_answers(data):
             parent_id_xml = int(data.attrib['ParentId'])
             return {'creation_date_answer': creation_date_xml,
                     'parent_id': parent_id_xml}
-    except:
+    except KeyboardInterrupt:
         return None
 
 
@@ -102,7 +102,7 @@ def join_questions_answers(data1, data2):
 
 
 def filter_answers_dates(a):
-    """ 
+    """
     Find the first date when a posts was answer.
     Args:
        [ a (dict) : 'id': 0,
@@ -150,28 +150,28 @@ def mapper_answers(data):
 
 if __name__ == '__main__':
     '''
-    From the ranking of the top 0-100 by score, 
+    From the ranking of the top 0-100 by score,
     then get the average response of the posts.
     Requirements:
         - Id
         - Score
         - PostTypeId:
-                    - 1 : Post question  
+                    - 1 : Post question
                             - CreationDate
-                    - 2 : Post answer 
-                            - ParentID  
+                    - 2 : Post answer
+                            - ParentID
                             - CreationDate
     '''
     # Start time proccess
     start = time.process_time()
 
     # Logger paths
-    log_file_path = path.join(path.dirname
-                             (path.abspath(__file__)), 'log.cfg')
-    folder_path = path.join(path.dirname
-                           (path.abspath(__file__)), 'logs', '')
-    logfilename = path.join(path.dirname
-                           (path.abspath(__file__)), 'logs', 'log_top100op.log')
+    log_file_path = path.join(path.dirname(
+        path.abspath(__file__)), 'log.cfg')
+    folder_path = path.join(path.dirname(
+        path.abspath(__file__)), 'logs', '')
+    logfilename = path.join(path.dirname(
+        path.abspath(__file__)), 'logs', 'log_top100op.log')
 
     # Check if folder exist
     if not os.path.isdir(folder_path):
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     parent_path = path.join(path.dirname(
         path.abspath(__file__)))
     # XML post file
-    tree = ET.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
+    tree = Et.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
 
     # Get the parent tag of the xml document
     root = tree.getroot()

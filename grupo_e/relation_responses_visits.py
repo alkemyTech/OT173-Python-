@@ -2,10 +2,11 @@ import logging
 import logging.config
 import os
 import time
-import xml.etree.ElementTree as ET
 from collections import Counter
 from functools import reduce
 from os import path
+
+from defusedxml.ElementTree import Et
 
 
 def chunkify(iterable, number_of_chunks):
@@ -27,7 +28,7 @@ def get_data(data):
         responses_xml = int(data.attrib['AnswerCount'])
         visits_xml = int(data.attrib['ViewCount'])
         return {'responses': responses_xml, 'visits': visits_xml}
-    except:
+    except KeyboardInterrupt:
         return None
 
 
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     Requirements:
         - AnswerCount.
         - ViewCount.
-    Details: 
+    Details:
         1. Sum all values.
         2. Div values and obtain relation value.
     '''
@@ -89,7 +90,7 @@ if __name__ == '__main__':
     parent_path = path.join(path.dirname
                             (path.abspath(__file__)))
     # XML post file
-    tree = ET.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
+    tree = Et.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
 
     # Getting the parent tag of the xml document
     root = tree.getroot()

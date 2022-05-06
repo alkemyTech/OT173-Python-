@@ -10,9 +10,6 @@ from operator import add
 from os import path
 
 
->> > et = parse(xmlfile)
-
-
 def chunkify(iterable, number_of_chunks):
     """Return number of data required"""
     for i in range(0, len(iterable), number_of_chunks):
@@ -77,7 +74,7 @@ if __name__ == '__main__':
 
     # Path XML
     parent_path = path.join(path.dirname(path.abspath(__file__)))
-    
+
     # XML post file
     tree = ET.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
 

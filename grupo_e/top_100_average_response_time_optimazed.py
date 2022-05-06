@@ -4,7 +4,7 @@ import logging.config
 import multiprocessing
 import os
 import time
-import xml.etree.ElementTree as ET
+from defusedxml.ElementTree import ET
 from datetime import datetime
 from functools import reduce
 from os import path
@@ -26,8 +26,8 @@ def get_post_question(data):
             data.attrib['CreationDate'], '%Y-%m-%dT%H:%M:%S.%f')
 
         if score_xml and post_question_xml == 1 and id_post_xml and creation_date_xml:
-            return {'id_post': id_post_xml, 
-                    'score': score_xml, 
+            return {'id_post': id_post_xml,
+                    'score': score_xml,
                     'creation_date_question': creation_date_xml}
     except:
         return None
@@ -42,7 +42,7 @@ def get_post_answers(data):
 
         if post_question_xml == 2 and creation_date_xml:
             parent_id_xml = int(data.attrib['ParentId'])
-            return {'creation_date_answer': creation_date_xml, 
+            return {'creation_date_answer': creation_date_xml,
                     'parent_id': parent_id_xml}
     except:
         return None
@@ -166,18 +166,18 @@ if __name__ == '__main__':
 
     # Logger paths
     log_file_path = path.join(path.dirname
-                              (path.abspath(__file__)), 'log.cfg')
+                             (path.abspath(__file__)), 'log.cfg')
     folder_path = path.join(path.dirname
-                            (path.abspath(__file__)), 'logs', '')
+                           (path.abspath(__file__)), 'logs', '')
     logfilename = path.join(path.dirname
-                            (path.abspath(__file__)), 'logs', 'log_top100op.log')
+                           (path.abspath(__file__)), 'logs', 'log_top100op.log')
 
     # Check if folder exist
     if not os.path.isdir(folder_path):
         os.makedirs(folder_path)
 
     # Logger config file
-    logging.config.fileConfig(log_file_path, 
+    logging.config.fileConfig(log_file_path,
                               defaults={'logfilename': logfilename})
     logger_dev = logging.getLogger('file_log')
     logger_console = logging.getLogger(__name__)
@@ -194,30 +194,29 @@ if __name__ == '__main__':
     # Segment data
     data_chunk1 = chunkify(root, number_of_chunks=150)
     data_chunk2 = chunkify(root, number_of_chunks=150)
-    
+
     # Multiprocessing.  - cpu_cores = num of cores
     cpu_cores = int(multiprocessing.cpu_count())
-    
-    
+
     with multiprocessing.Pool(cpu_cores) as p:
         # Map question and answers
         mapped_questions = list(p.map(mapper_questions, data_chunk1))
         mapped_questions = list(filter(None, mapped_questions))
         mapped_questions = list(first_100_post_by_score(mapped_questions))
-        
+
         mapped_answers = list(p.map(mapper_answers, data_chunk2))
         mapped_answers = list(filter(None, mapped_answers))
 
-        # Match by (id, parent_id) and return -> dates 
+        # Match by (id, parent_id) and return -> dates
         mapped_qa = join_questions_answers(mapped_questions,
-                                           mapped_answers) 
-        
+                                           mapped_answers)
+
         # Order values by id.   -opt arg: reverse = True
         mapped_qa = sorted(mapped_qa, key=lambda e: (-e['id'], e['id']))
-        
+
         # Find first date of answers
         mapped_qa = filter_answers_dates(mapped_qa)
-        
+
         # Time to respond a question (date difference).
         mapped_qa = list(p.map(response_time_post, mapped_qa))
 
@@ -228,4 +227,5 @@ if __name__ == '__main__':
     logger_dev.info(f'Result average response time: {average_reponses}')
 
     # Obtain the run time and saved log file
-    logger_dev.info(f'Num of cores: {cpu_cores}, Runtime: {str(time.process_time() - start)}s')
+    logger_dev.info(
+        f'Num of cores: {cpu_cores}, Runtime: {str(time.process_time() - start)}s')

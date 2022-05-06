@@ -2,12 +2,15 @@ import logging
 import logging.config
 import os
 import time
-import xml.etree.ElementTree as ET
+from defusedxml.ElementTree import ET
 from collections import Counter
 from datetime import datetime
 from functools import reduce
 from operator import add
 from os import path
+
+
+>> > et = parse(xmlfile)
 
 
 def chunkify(iterable, number_of_chunks):
@@ -61,24 +64,23 @@ if __name__ == '__main__':
     folder_path = path.join(path.dirname
                            (path.abspath(__file__)), 'logs', '')
     logfilename = path.join(path.dirname
-                            (path.abspath(__file__)), 'logs', 'log_top10dates.log')
+                           (path.abspath(__file__)), 'logs', 'log_top10dates.log')
 
     # Check if exist folder
     if not os.path.isdir(folder_path):
         os.makedirs(folder_path)
 
     # Logger config file
-    logging.config.fileConfig(log_file_path,
-                              defaults={'logfilename': logfilename})
+    logging.config.fileConfig(log_file_path, defaults={'logfilename': logfilename})
     logger_dev = logging.getLogger('file_log')
     logger_console = logging.getLogger(__name__)
 
     # Path XML
-    parent_path = path.join(path.dirname
-                            (path.abspath(__file__)))
+    parent_path = path.join(path.dirname(path.abspath(__file__)))
+    
     # XML post file
     tree = ET.parse(parent_path + './/112010 Meta Stack Overflow//posts.xml')
-    
+
     # Getting the parent tag of the xml document
     root = tree.getroot()
 

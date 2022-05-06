@@ -122,7 +122,6 @@ def filter_answers_dates(a):
             temp = []
             continue
         if i == len(a) - 1:
-            #a = a[i+1]
             break
     logger_console.debug(
         'Filter and returned first date of the answer succesfully')

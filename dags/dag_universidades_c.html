@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module dag_universidades_c</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>dag_universidades_c</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/kpitan/airflow/dags/OT173-Python-/dags/dag_universidades_c.py">/home/kpitan/airflow/dags/OT173-Python-/dags/dag_universidades_c.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="boto3.html">boto3</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-extract"><strong>extract</strong></a>(query, university)</dt><dd><tt>PythonOperator&nbsp;and&nbsp;PostgresHook&nbsp;to&nbsp;get&nbsp;the&nbsp;data&nbsp;from&nbsp;the<br>
+database&nbsp;and&nbsp;save&nbsp;it&nbsp;in&nbsp;a&nbsp;csv&nbsp;file&nbsp;in&nbsp;the&nbsp;include/tmp&nbsp;folder<br>
+of&nbsp;the&nbsp;project.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;query&nbsp;(str):&nbsp;The&nbsp;query&nbsp;file&nbsp;name&nbsp;and&nbsp;extension&nbsp;to&nbsp;be&nbsp;executed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;database.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;example:&nbsp;query_universidades_c.sql.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;university&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;university&nbsp;to&nbsp;be&nbsp;extracted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;example:&nbsp;'universidad_de_los_andes'.</tt></dd></dl>
+ <dl><dt><a name="-transform_jujuy"><strong>transform_jujuy</strong></a>(university, csv_file)</dt><dd><tt>PythonOperator&nbsp;and&nbsp;Pandas&nbsp;to&nbsp;transform&nbsp;the&nbsp;data&nbsp;in&nbsp;the&nbsp;csv&nbsp;file<br>
+Args<br>
+&nbsp;&nbsp;&nbsp;&nbsp;university&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;university&nbsp;to&nbsp;be&nbsp;saved&nbsp;in&nbsp;the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;csv_file&nbsp;(str):&nbsp;the&nbsp;csv&nbsp;file&nbsp;to&nbsp;be&nbsp;transformed.<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+ <dl><dt><a name="-transform_palermo"><strong>transform_palermo</strong></a>(university, csv_file)</dt><dd><tt>PythonOperator&nbsp;and&nbsp;Pandas&nbsp;to&nbsp;transform&nbsp;the&nbsp;data&nbsp;in&nbsp;the&nbsp;csv&nbsp;file<br>
+&nbsp;<br>
+Args<br>
+&nbsp;&nbsp;&nbsp;&nbsp;university&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;university&nbsp;to&nbsp;be&nbsp;saved&nbsp;in&nbsp;the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txt&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;csv_file&nbsp;(str):&nbsp;the&nbsp;csv&nbsp;file&nbsp;to&nbsp;be&nbsp;transformed.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+ <dl><dt><a name="-upload_txt"><strong>upload_txt</strong></a>(file_name, object_name=None)</dt><dd><tt>pythonOprator&nbsp;to&nbsp;upload&nbsp;the&nbsp;data&nbsp;to&nbsp;the&nbsp;s3&nbsp;bucket<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file_name&nbsp;(str):&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;uploaded.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;object_name&nbsp;(str,&nbsp;optional):&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;object&nbsp;to&nbsp;be&nbsp;uploaded&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;e:&nbsp;if&nbsp;the&nbsp;file&nbsp;is&nbsp;not&nbsp;found.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>base_path</strong> = '/home/kpitan/airflow/dags/OT173-Python-'<br>
+<strong>config</strong> = &lt;decouple.AutoConfig object&gt;<br>
+<strong>dag</strong> = &lt;DAG: dag_universidades_c&gt;<br>
+<strong>default_args</strong> = {'depends_on_past': False, 'email': ['alkemy@example.com'], 'email_on_failure': False, 'email_on_retry': False, 'owner': 'alkemy', 'retries': 5, 'retry_delay': datetime.timedelta(seconds=300)}<br>
+<strong>extract_task_jujuy</strong> = &lt;Task(PythonOperator): extract_jujuy&gt;<br>
+<strong>extract_task_palermo</strong> = &lt;Task(PythonOperator): extract_palermo&gt;<br>
+<strong>logger</strong> = &lt;Logger dag_universidades_c (INFO)&gt;<br>
+<strong>path_tmp</strong> = '/home/kpitan/airflow/dags/OT173-Python-/include/tmp'<br>
+<strong>transform_task_jujuy</strong> = &lt;Task(PythonOperator): transform_jujuy&gt;<br>
+<strong>transform_task_palermo</strong> = &lt;Task(PythonOperator): transform_palermo&gt;<br>
+<strong>upload_task_jujuy</strong> = &lt;Task(PythonOperator): load_jujuy&gt;<br>
+<strong>upload_task_palermo</strong> = &lt;Task(PythonOperator): load_palermo&gt;</td></tr></table>
+</body></html>

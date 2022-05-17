@@ -5,7 +5,6 @@ SELECT universidad as university,
     sexo as gender,
     birth_dates as age,
     codigo_postal as postal_code,
-    direcciones as "location",
     correos_electronicos as email
 FROM palermo_tres_de_febrero
 WHERE universidad = '_universidad_de_palermo'
